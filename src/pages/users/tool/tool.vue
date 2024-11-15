@@ -3,10 +3,13 @@
     <!-- 常用工具 -->
     <view class="interact-tools" style="margin-bottom: 15px">
       <div class="paddingBox">
-        <view class="interact-container">
+        <view
+          class="grid grid-cols-4 text-center bg-[#fff]"
+          style="margin: 0 20rpx; border-radius: 20rpx"
+        >
           <view class="interact-item" @click="navigateTo('/pages/mine/address/addressManage')">
             <image src="/static/mine/myaddress.png" mode=""></image>
-            <view>地址管理</view>
+            <view class="">地址管理</view>
           </view>
 
           <view class="interact-item" @click="navigateTo('/pages/mine/myTracks')">
@@ -102,33 +105,14 @@ function navigateTo(url: string) {
   .interactBox {
     height: 156rpx;
   }
-  .interact-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin: 0 20rpx;
-    text-align: center;
-    background: #fff;
-    border-radius: 20rpx;
-    box-shadow: 0 4rpx 24rpx 0 rgba($color: #f6f6f6, $alpha: 1);
-    .interact-item-img {
-      width: 52rpx !important;
-      height: 52rpx !important;
-      // margin-bottom:  !important;
-      margin: 0 auto 6rpx auto !important;
-    }
-    image {
-      width: 52rpx;
-      height: 52rpx;
-      margin-bottom: 6rpx;
-    }
+}
 
-    .interact-item {
-      width: 25%;
-      height: 160rpx;
-      padding: 30rpx;
-      font-size: 18px;
-    }
-  }
+image {
+  width: 52rpx;
+  height: 52rpx;
+  margin-bottom: 6rpx;
+}
+.interact-item {
+  padding: 25rpx 10rpx;
 }
 </style>

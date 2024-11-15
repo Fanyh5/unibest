@@ -38,6 +38,12 @@ export default defineUniPages({
         pagePath: 'pages/about/about',
         text: '%tabbar.about%',
       },
+      {
+        iconPath: 'static/tabbar/personal.png',
+        selectedIconPath: 'static/tabbar/personalHL.png',
+        pagePath: 'pages/users/index',
+        text: '%tabbar.my%',
+      },
     ],
   },
 })

@@ -70,6 +70,7 @@
       "path": "pages/users/index",
       "type": "page",
       "style": {
+        "navigationStyle": "custom",
         "navigationBarTitleText": "个人中心"
       }
     },
