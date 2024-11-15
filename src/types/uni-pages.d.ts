@@ -7,7 +7,9 @@ interface NavigateToOptions {
   url: "/pages/index/index" |
        "/pages/about/about" |
        "/pages/about/i18n" |
-       "/pages/users/index";
+       "/pages/users/index" |
+       "/pages/users/shortcut/shortcut" |
+       "/pages/users/tool/tool";
 }
 interface RedirectToOptions extends NavigateToOptions {}
 

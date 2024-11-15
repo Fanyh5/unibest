@@ -70,9 +70,16 @@
       "path": "pages/users/index",
       "type": "page",
       "style": {
-        "navigationStyle": "custom",
         "navigationBarTitleText": "个人中心"
       }
+    },
+    {
+      "path": "pages/users/shortcut/shortcut",
+      "type": "page"
+    },
+    {
+      "path": "pages/users/tool/tool",
+      "type": "page"
     }
   ],
   "subPackages": []
