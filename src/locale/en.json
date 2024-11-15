@@ -1,6 +1,7 @@
 {
   "tabbar.home": "Home",
   "tabbar.about": "About",
+  "tabbar.my": "User",
   "app.name": "En Title",
   "weight": "{heavy}KG",
   "detail": "{0}cm, {1}KG",

@@ -36,10 +36,10 @@
         "text": "%tabbar.about%"
       },
       {
-        "iconPath": "static/tabbar/example.png",
-        "selectedIconPath": "static/tabbar/exampleHL.png",
+        "iconPath": "static/tabbar/personal.png",
+        "selectedIconPath": "static/tabbar/personalHL.png",
         "pagePath": "pages/users/index",
-        "text": "%tabbar.about%"
+        "text": "%tabbar.my%"
       }
     ]
   },
