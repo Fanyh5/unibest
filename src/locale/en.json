@@ -1,8 +1,6 @@
 {
-  "tabbar.home": "Home",
-  "tabbar.about": "About",
-  "app.name": "En Title",
-  "weight": "{heavy}KG",
-  "detail": "{0}cm, {1}KG",
-  "introduction": "I am {name},height:{detail.height},weight:{detail.weight}"
+  "home": "Home",
+  "category": "Classify",
+  "about": "About",
+  "searchPlaceholder": "Please enter your search"
 }

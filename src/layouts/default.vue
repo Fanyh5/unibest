@@ -1,13 +1,18 @@
 <template>
   <view>
     <slot />
-    <tabbar v-if="showTabbar"></tabbar>
+    <!--    <tabbar v-if="showTabbar"></tabbar>-->
   </view>
 </template>
 
 <script setup lang="ts">
 // TabBar 页面的路径配置
-const tabbarPages = ['/pages/index/index', '/pages/about/about', '/']
+const tabbarPages = [
+  '/pages/index/index',
+  '/pages/category/category',
+  '/',
+  '/pages/message/message',
+]
 
 // TabBar 显示状态
 const showTabbar = ref(false)

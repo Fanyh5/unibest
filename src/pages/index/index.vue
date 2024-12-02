@@ -3,25 +3,38 @@
 {
   style: {
     navigationStyle: 'custom',
-    navigationBarTitleText: '首页',
   },
 }
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <navbar title="首页"></navbar>
+    <navbar :placeholder="true">
+      <template #left>
+        <view></view>
+      </template>
+      <template #center>
+        <view class="flex align-center w-full px-2">
+          <up-search
+            v-model="keyword"
+            :show-action="false"
+            :placeholder="t('searchPlaceholder')"
+            :showAction="false"
+          ></up-search>
+          <up-icon name="scan" size="28"></up-icon>
+        </view>
+      </template>
+    </navbar>
     <view class="pt-2 px-4">
-      <view class="text-justify max-w-100 m-auto text-4 indent mb-2">{{ description }}</view>
       <view class="text-center mt-8">
         当前平台是：
         <text class="text-green-500">{{ PLATFORM.platform }}</text>
       </view>
-      <up-button type="primary" text="确定"></up-button>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
+import { t } from '@/locale'
 // #ifdef MP
 import Navbar from '@/components/navbar/navbar.vue'
 // #endif
@@ -33,18 +46,8 @@ defineOptions({
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
-const author = ref('菲鸽')
-const description = ref(
-  'unibest 是一个集成了多种工具和技术的 uniapp 开发模板，由 uniapp + Vue3 + Ts + Vite4 + UnoCss + UniUI + VSCode 构建，模板具有代码提示、自动格式化、统一配置、代码片段等功能，并内置了许多常用的基本组件和基本功能，让你编写 uniapp 拥有 best 体验。',
-)
-// 测试 uni API 自动引入
-onLoad(() => {
-  console.log(author)
-})
+
+const keyword = ref<string>('')
 </script>
 
-<style>
-.main-title-color {
-  color: #d14328;
-}
-</style>
+<style></style>

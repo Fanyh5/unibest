@@ -15,7 +15,9 @@
 // TabBar 配置
 const tabbarList = ref([
   { icon: 'home', text: '首页', pagePath: '/pages/index/index' },
-  { icon: 'search', text: '搜索', pagePath: '/pages/about/about' },
+  { icon: 'grid', text: '分类', pagePath: '/pages/category/category' },
+  { icon: 'chat-fill', text: '消息', pagePath: '/pages/message/message' },
+  { icon: 'account', text: '我的', pagePath: '/pages/about/about' },
 ])
 
 const activeIndex = ref(0)

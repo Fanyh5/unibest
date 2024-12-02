@@ -26,16 +26,13 @@
     "spacing": "3px",
     "list": [
       {
-        "iconPath": "static/tabbar/home.png",
-        "selectedIconPath": "static/tabbar/homeHL.png",
-        "pagePath": "pages/index/index",
-        "text": "%tabbar.home%"
+        "pagePath": "pages/index/index"
       },
       {
-        "iconPath": "static/tabbar/example.png",
-        "selectedIconPath": "static/tabbar/exampleHL.png",
-        "pagePath": "pages/about/about",
-        "text": "%tabbar.about%"
+        "pagePath": "pages/category/category"
+      },
+      {
+        "pagePath": "pages/message/message"
       }
     ]
   },
@@ -44,22 +41,28 @@
       "path": "pages/index/index",
       "type": "home",
       "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "首页"
+        "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/about/about",
+      "path": "pages/category/category",
       "type": "page",
       "style": {
-        "navigationBarTitleText": "关于"
+        "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/about/i18n",
+      "path": "pages/error/404",
       "type": "page",
       "style": {
-        "navigationBarTitleText": "%app.name%"
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/message/message",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
       }
     }
   ],

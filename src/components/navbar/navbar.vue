@@ -1,21 +1,13 @@
 <template>
-  <up-navbar
-    :custom-back="true"
-    :title="title"
-    :height="navbarHeight"
-    :backgroundColor="backgroundColor"
-    :color="titleColor"
-    :fixed="true"
-    class="custom-navbar"
-  >
+  <up-navbar :custom-back="true" :height="navbarHeight" v-bind="props" class="custom-navbar">
     <!-- 左侧插槽 -->
     <template #left>
       <slot name="left"></slot>
     </template>
 
     <!-- 标题插槽 -->
-    <template #title>
-      <slot name="title">{{ title }}</slot>
+    <template #center>
+      <slot name="center">{{ title }}</slot>
     </template>
 
     <!-- 右侧插槽 -->
@@ -30,13 +22,10 @@
 <script setup lang="ts">
 // Props
 const props = defineProps<{
-  title?: string
-  backgroundColor?: string
-  titleColor?: string
   extraRightMargin?: number
 }>()
 
-const { title = '', backgroundColor = '#fff', titleColor = '#333', extraRightMargin = 10 } = props
+const { title = '', extraRightMargin = 10 } = props
 
 // 状态
 const navbarHeight = ref<number>(44) // 默认导航栏高度
@@ -54,19 +43,7 @@ const initNavbar = () => {
     navbarHeight.value = capsuleHeight
     rightOffset.value = menuButtonInfo.width + extraRightMargin
   }
-
-  // 适配平台
-  if (platform === 'android') {
-    navbarHeight.value += 10
-  } else if (platform === 'ios') {
-    navbarHeight.value += 5
-  }
 }
-
-// 属性变化时重新初始化
-watch([() => backgroundColor, () => titleColor], () => {
-  initNavbar()
-})
 
 // 初始化逻辑
 onMounted(() => {

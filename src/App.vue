@@ -8,6 +8,12 @@ onShow(() => {
   uni.hideTabBar()
 })
 onHide(() => {})
+
+onPageNotFound(() => {
+  uni.redirectTo({
+    url: 'pages/error/404', // 404 页面的路径
+  })
+})
 </script>
 
 <style lang="scss">
@@ -54,5 +60,8 @@ image {
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+page {
+  background-color: #f2f3f5;
 }
 </style>

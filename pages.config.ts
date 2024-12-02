@@ -29,16 +29,13 @@ export default defineUniPages({
     spacing: '3px',
     list: [
       {
-        iconPath: 'static/tabbar/home.png',
-        selectedIconPath: 'static/tabbar/homeHL.png',
         pagePath: 'pages/index/index',
-        text: '%tabbar.home%',
       },
       {
-        iconPath: 'static/tabbar/example.png',
-        selectedIconPath: 'static/tabbar/exampleHL.png',
-        pagePath: 'pages/about/about',
-        text: '%tabbar.about%',
+        pagePath: 'pages/category/category',
+      },
+      {
+        pagePath: 'pages/message/message',
       },
     ],
   },
