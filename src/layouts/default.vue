@@ -1,7 +1,7 @@
 <template>
   <view>
     <slot />
-    <!--    <tabbar v-if="showTabbar"></tabbar>-->
+    <tabbar v-if="showTabbar"></tabbar>
   </view>
 </template>
 
