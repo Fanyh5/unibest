@@ -9,9 +9,6 @@
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
     <navbar :placeholder="true">
-      <template #left>
-        <view></view>
-      </template>
       <template #center>
         <view class="flex align-center w-full px-2">
           <up-search

@@ -6,7 +6,7 @@
 }
 </route>
 <template>
-  <view class="overflow-hidden mt-[safeAreaInsets?.top]">
+  <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
     <view class="p-2">
       <up-swipe-action>
         <up-swipe-action-item

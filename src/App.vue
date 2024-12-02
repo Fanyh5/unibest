@@ -11,7 +11,7 @@ onHide(() => {})
 
 onPageNotFound(() => {
   uni.redirectTo({
-    url: 'pages/error/404', // 404 页面的路径
+    url: '/pages/error/404', // 404 页面的路径
   })
 })
 </script>
