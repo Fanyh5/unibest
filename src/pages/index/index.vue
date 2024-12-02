@@ -22,7 +22,7 @@
       </template>
     </navbar>
     <view class="pt-2 px-4">
-      <view class="text-center mt-8">
+      <view class="text-center mt-8 -translate-y-6">
         当前平台是：
         <text class="text-green-500">{{ PLATFORM.platform }}</text>
       </view>

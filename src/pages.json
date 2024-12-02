@@ -64,6 +64,17 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/user/user",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/tool/tool",
+      "type": "page"
     }
   ],
   "subPackages": []

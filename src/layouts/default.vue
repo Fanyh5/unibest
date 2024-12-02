@@ -12,6 +12,7 @@ const tabbarPages = [
   '/pages/category/category',
   '/',
   '/pages/message/message',
+  '/pages/user/user',
 ]
 
 // TabBar 显示状态

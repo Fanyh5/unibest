@@ -17,7 +17,7 @@ const tabbarList = ref([
   { icon: 'home', text: '首页', pagePath: '/pages/index/index' },
   { icon: 'grid', text: '分类', pagePath: '/pages/category/category' },
   { icon: 'chat-fill', text: '消息', pagePath: '/pages/message/message' },
-  { icon: 'account', text: '我的', pagePath: '/pages/about/about' },
+  { icon: 'account', text: '我的', pagePath: '/pages/user/user' },
 ])
 
 const activeIndex = ref(0)
@@ -80,8 +80,9 @@ const onTabChange = (index: number) => {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 10;
+  z-index: 999;
   background-color: #ffffff;
   box-shadow: 0 -2rpx 4rpx rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
 }
 </style>
