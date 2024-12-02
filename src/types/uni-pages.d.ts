@@ -9,6 +9,8 @@ interface NavigateToOptions {
        "/pages/error/404" |
        "/pages/message/message" |
        "/pages/user/user" |
+       "/pages/user/tool/point" |
+       "/pages/user/tool/setting" |
        "/pages/user/tool/tool";
 }
 interface RedirectToOptions extends NavigateToOptions {}

@@ -73,6 +73,20 @@
       }
     },
     {
+      "path": "pages/user/tool/point",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/tool/setting",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user/tool/tool",
       "type": "page"
     }

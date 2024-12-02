@@ -7,83 +7,14 @@
           class="grid grid-cols-4 text-center bg-[#fff]"
           style="margin: 0 20rpx; border-radius: 20rpx"
         >
-          <view class="interact-item" @click="navigateTo('/pages/mine/address/addressManage')">
-            <image src="/static/mine/myaddress.png"></image>
-            <view class="">地址管理</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/mine/myTracks')">
-            <image src="/static/mine/logistics.png"></image>
-            <view>我的足迹</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/order/evaluate/myEvaluate')">
-            <image src="/static/mine/feedback.png"></image>
-            <view>我的评价</view>
-          </view>
-          <!-- <view class="interact-item" @click="linkMsgDetail()">
-            <image src="/static/mine/mycommit.png"></image>
-            <view>我的消息</view>
-          </view> -->
-
-          <view class="interact-item" @click="navigateTo('/pages/mine/myCollect')">
-            <image src="/static/mine/myfavorite.png"></image>
-            <view>我的关注</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/users/set/point')">
-            <image src="/static/mine/mypoint.png"></image>
-            <view>我的积分</view>
-          </view>
-
-          <view class="interact-item">
-            <image src="/static/mine/distribution.png"></image>
-            <view>我的分销</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/order/complain/complainList')">
-            <image src="/static/mine/shensu.png"></image>
-            <view>我的投诉</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/cart/coupon/myCoupon')">
-            <image src="/static/mine/mycoupon.png"></image>
-            <view>优惠券</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/users/set/signIn')">
-            <image src="/static/mine/sign.png"></image>
-            <view>每日签到</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/cart/coupon/couponCenter')">
-            <image src="/static/mine/couponcenter.png"></image>
-            <view>领券中心</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/promotion/bargain/log')">
-            <image src="/static/mine/kanjia.png"></image>
-            <view>砍价记录</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/mine/set/feedBack')">
-            <image src="/static/mine/feedback.png"></image>
-            <view>意见反馈</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/mine/set/editionIntro')">
-            <image src="/static/mine/pointgift.png"></image>
-            <view>关于</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/passport/entry/seller/index')">
-            <image src="/static/mine/feedback.png"></image>
-            <view>店铺入驻</view>
-          </view>
-
-          <view class="interact-item" @click="navigateTo('/pages/users/set/index')">
-            <image src="/static/mine/setting.png"></image>
-            <view>设置</view>
+          <view
+            v-for="(item, index) in toolList"
+            :key="index"
+            class="interact-item"
+            @click="item.url && navigateTo(item.url)"
+          >
+            <image :src="item.icon"></image>
+            <view>{{ item.title }}</view>
           </view>
         </view>
       </div>
@@ -92,6 +23,84 @@
 </template>
 
 <script lang="ts" setup>
+const toolList = [
+  {
+    title: '地址管理',
+    icon: '/static/mine/myaddress.png',
+    url: '/pages/mine/address/addressManage',
+  },
+  {
+    title: '我的足迹',
+    icon: '/static/mine/logistics.png',
+    url: '/pages/mine/myTracks',
+  },
+  {
+    title: '我的评价',
+    icon: '/static/mine/feedback.png',
+    url: '/pages/order/evaluate/myEvaluate',
+  },
+  {
+    title: '我的关注',
+    icon: '/static/mine/myfavorite.png',
+    url: '/pages/mine/myCollect',
+  },
+  {
+    title: '我的积分',
+    icon: '/static/mine/mypoint.png',
+    url: '/pages/user/tool/point',
+  },
+  {
+    title: '我的分销',
+    icon: '/static/mine/distribution.png',
+    url: '',
+  },
+  {
+    title: '我的投诉',
+    icon: '/static/mine/shensu.png',
+    url: '/pages/order/complain/complainList',
+  },
+  {
+    title: '优惠券',
+    icon: '/static/mine/mycoupon.png',
+    url: '/pages/cart/coupon/myCoupon',
+  },
+  {
+    title: '每日签到',
+    icon: '/static/mine/sign.png',
+    url: '/pages/users/set/signIn',
+  },
+  {
+    title: '领券中心',
+    icon: '/static/mine/couponcenter.png',
+    url: '/pages/cart/coupon/couponCenter',
+  },
+  {
+    title: '砍价记录',
+    icon: '/static/mine/kanjia.png',
+    url: '/pages/promotion/bargain/log',
+  },
+  {
+    title: '意见反馈',
+    icon: '/static/mine/feedback.png',
+    url: '/pages/mine/set/feedBack',
+  },
+  {
+    title: '关于',
+    icon: '/static/mine/pointgift.png',
+    url: '/pages/mine/set/editionIntro',
+  },
+  {
+    title: '店铺入驻',
+    icon: '/static/mine/feedback.png',
+    url: '/pages/passport/entry/seller/index',
+  },
+  {
+    title: '设置',
+    icon: '/static/mine/setting.png',
+    url: '/pages/user/tool/setting',
+  },
+]
+
 function navigateTo(url: string) {
   uni.navigateTo({
     url,

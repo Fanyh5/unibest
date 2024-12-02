@@ -2,5 +2,6 @@
   "home": "Home",
   "category": "Classify",
   "about": "About",
-  "searchPlaceholder": "Please enter your search"
+  "searchPlaceholder": "Please enter your search",
+  "setting": "Settings"
 }
