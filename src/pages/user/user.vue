@@ -48,7 +48,7 @@
       <!-- 订单状态导航 -->
       <view class="grid grid-cols-5 gap-2 justify-items-center text-center mt-4">
         <view class="order-item" @click="navigateTo('/pages/order/list?status=1')">
-          <view class="i-carbon-document-pending text-2xl text-[#ff0000] mb-1" />
+          <view class="i-carbon-time text-2xl text-[#ff0000] mb-1"></view>
           <view class="text-sm">待付款</view>
         </view>
         <view class="order-item" @click="navigateTo('/pages/order/list?status=2')">
@@ -60,7 +60,7 @@
           <view class="text-sm">待评价</view>
         </view>
         <view class="order-item" @click="navigateTo('/pages/order/afterSale/list')">
-          <view class="i-carbon-service text-2xl text-[#ff0000] mb-1" />
+          <view class="i-carbon-help text-2xl text-[#ff0000] mb-1"></view>
           <view class="text-sm">售后</view>
         </view>
         <view class="order-item" @click="navigateTo('/pages/order/list')">
