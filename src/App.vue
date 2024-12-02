@@ -2,14 +2,12 @@
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 
 onLaunch(() => {
-  console.log('App Launch')
+  uni.hideTabBar()
 })
 onShow(() => {
-  console.log('App Show')
+  uni.hideTabBar()
 })
-onHide(() => {
-  console.log('App Hide')
-})
+onHide(() => {})
 </script>
 
 <style lang="scss">

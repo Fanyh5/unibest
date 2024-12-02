@@ -9,11 +9,7 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <navbar :placeholder="true" title="购物车">
-      <template v-slot:right>
-        <div class="light-color edit">完成</div>
-      </template>
-    </navbar>
+    <navbar title="首页"></navbar>
     <view class="pt-2 px-4">
       <view class="text-justify max-w-100 m-auto text-4 indent mb-2">{{ description }}</view>
       <view class="text-center mt-8">
@@ -26,6 +22,9 @@
 </template>
 
 <script lang="ts" setup>
+// #ifdef MP
+import Navbar from '@/components/navbar/navbar.vue'
+// #endif
 import PLATFORM from '@/utils/platform'
 
 defineOptions({
