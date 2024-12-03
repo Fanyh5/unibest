@@ -8,13 +8,17 @@ interface NavigateToOptions {
        "/pages/category/category" |
        "/pages/error/404" |
        "/pages/message/message" |
+       "/pages/public/search" |
        "/pages/user/user" |
+       "/pages/user/coupon/coupon" |
+       "/pages/user/coupon/detail" |
        "/pages/user/setting/about" |
        "/pages/user/setting/feedback" |
        "/pages/user/setting/i18n" |
        "/pages/user/setting/personal" |
        "/pages/user/tool/point" |
        "/pages/user/tool/setting" |
+       "/pages/user/tool/signIn" |
        "/pages/user/tool/tool";
 }
 interface RedirectToOptions extends NavigateToOptions {}

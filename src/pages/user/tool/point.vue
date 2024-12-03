@@ -7,9 +7,10 @@
 </route>
 <template>
   <view class="content overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
+    <up-navbar :title="t('points')" :placeholder="true" :autoBack="true"></up-navbar>
     <!-- 积分头部卡片 -->
     <view class="portrait-box">
-      <image src="/static/mine/point/point_bg_1.png" mode=""></image>
+      <image src="/static/mine/point/point_bg_1.png"></image>
       <image class="point-img" src="/static/mine/point/tradehall.png" />
       <view class="position-point">
         <view class="apply-point" @click="handleApplyPoint">申请积分</view>
@@ -52,6 +53,7 @@
   </view>
 </template>
 <script setup lang="ts">
+import { t } from '@/locale/index'
 import { onLoad, onReachBottom } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 

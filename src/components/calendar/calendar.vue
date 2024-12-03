@@ -40,7 +40,7 @@
           {{ item.day }}
         </view>
         <view v-if="item.check" class="calendar-day-mark">
-          <img style="width: 24rpx; height: 24rpx" src="../static/images/star1.png" alt="" />
+          <img style="width: 24rpx; height: 24rpx" src="./images/star.png" alt="" />
           <view>+{{ item.value }}</view>
         </view>
       </view>

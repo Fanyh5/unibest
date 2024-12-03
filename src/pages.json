@@ -69,10 +69,32 @@
       }
     },
     {
+      "path": "pages/public/search",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user/user",
       "type": "page",
       "style": {
         "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/coupon/coupon",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/coupon/detail",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "优惠券详情"
       }
     },
     {
@@ -113,6 +135,13 @@
     },
     {
       "path": "pages/user/tool/setting",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/tool/signIn",
       "type": "page",
       "style": {
         "navigationStyle": "custom"

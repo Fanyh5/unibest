@@ -62,12 +62,12 @@ const toolList = [
   {
     title: '优惠券',
     icon: '/static/mine/mycoupon.png',
-    url: '/pages/cart/coupon/myCoupon',
+    url: '/pages/user/coupon/coupon',
   },
   {
     title: '每日签到',
     icon: '/static/mine/sign.png',
-    url: '/pages/users/set/signIn',
+    url: '/pages/user/tool/signIn',
   },
   {
     title: '领券中心',

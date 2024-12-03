@@ -176,3 +176,12 @@ export const getEvnBaseUploadUrl = () => {
 
   return baseUploadUrl
 }
+
+/** 主要是处理 arr.at(-1) 在安卓机上运行报错的 兼容性问题 */
+export const getArrElementByIdx = (arr: any[], index: number) => {
+  if (index < 0) return arr[arr.length + index]
+  if (index >= arr.length) return undefined
+  return arr[index]
+}
+
+export const getLastItem = (arr: any[]) => getArrElementByIdx(arr, -1)

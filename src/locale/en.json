@@ -7,5 +7,8 @@
   "switchLanguages": "SwitchLanguages",
   "aboutUs": "AboutUs",
   "personal": "PersonalInformation",
-  "feedback": "Feedback"
+  "feedback": "Feedback",
+  "points": "MyIntegral",
+  "signIn": "SignIn",
+  "coupon": "My Coupon"
 }
