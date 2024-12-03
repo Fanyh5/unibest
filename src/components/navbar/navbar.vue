@@ -1,5 +1,5 @@
 <template>
-  <up-navbar :custom-back="true" :height="navbarHeight" v-bind="props" class="custom-navbar">
+  <up-navbar placeholder :height="navbarHeight" v-bind="props" class="custom-navbar">
     <!-- 左侧插槽 -->
     <template #left>
       <slot name="left"></slot>
@@ -7,7 +7,7 @@
 
     <!-- 标题插槽 -->
     <template #center>
-      <slot name="center">{{ title }}</slot>
+      <slot name="center"></slot>
     </template>
 
     <!-- 右侧插槽 -->
@@ -20,12 +20,13 @@
 </template>
 
 <script setup lang="ts">
-// Props
+// Props - 保留原有属性，同时添加 `extraRightMargin`
 const props = defineProps<{
   extraRightMargin?: number
 }>()
 
-const { title = '', extraRightMargin = 10 } = props
+// 默认值
+const { extraRightMargin = 10 } = props
 
 // 状态
 const navbarHeight = ref<number>(44) // 默认导航栏高度
@@ -34,13 +35,14 @@ const rightOffset = ref<number>(0) // 右侧偏移量
 // 初始化导航栏参数
 const initNavbar = () => {
   const { statusBarHeight, platform } = uni.getSystemInfoSync()
+
+  // 获取胶囊信息
   const menuButtonInfo = uni.getMenuButtonBoundingClientRect
     ? uni.getMenuButtonBoundingClientRect()
     : null
 
   if (menuButtonInfo) {
-    const capsuleHeight = menuButtonInfo.height + (menuButtonInfo.top - statusBarHeight) * 2
-    navbarHeight.value = capsuleHeight
+    navbarHeight.value = menuButtonInfo.height + (menuButtonInfo.top - statusBarHeight) * 2
     rightOffset.value = menuButtonInfo.width + extraRightMargin
   }
 }

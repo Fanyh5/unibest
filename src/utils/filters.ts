@@ -108,19 +108,3 @@ export function quiteLoginOut(): void {
     },
   })
 }
-
-/**
- * 用户注销
- */
-export function logoff(): void {
-  uni.showModal({
-    title: '提示',
-    content:
-      '确认注销用户么？注销用户将无法再次登录并失去当前数据。根据法规数据最长保留6个月，期间可以联系客服人员进行恢复数据。',
-    success(res) {
-      if (res.confirm) {
-        navigateToLogin('/', 'redirectTo')
-      }
-    },
-  })
-}

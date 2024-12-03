@@ -8,7 +8,7 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <navbar :placeholder="true">
+    <navbar :placeholder="true" leftIcon="">
       <template #center>
         <view class="flex align-center w-full px-2">
           <up-search

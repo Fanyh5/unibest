@@ -7,11 +7,7 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <navbar :placeholder="true" :title="t('category')">
-      <template #left>
-        <view></view>
-      </template>
-    </navbar>
+    <navbar :placeholder="true" :title="t('category')" leftIcon=""></navbar>
     <view class="pt-2 px-4">
       <view class="text-center mt-8">
         当前平台是：
