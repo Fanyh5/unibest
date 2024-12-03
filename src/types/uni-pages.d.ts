@@ -9,6 +9,10 @@ interface NavigateToOptions {
        "/pages/error/404" |
        "/pages/message/message" |
        "/pages/user/user" |
+       "/pages/user/setting/about" |
+       "/pages/user/setting/feedback" |
+       "/pages/user/setting/i18n" |
+       "/pages/user/setting/personal" |
        "/pages/user/tool/point" |
        "/pages/user/tool/setting" |
        "/pages/user/tool/tool";

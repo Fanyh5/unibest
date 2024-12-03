@@ -73,6 +73,35 @@
       }
     },
     {
+      "path": "pages/user/setting/about",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/setting/feedback",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/setting/i18n",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/setting/personal",
+      "type": "page",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user/tool/point",
       "type": "page",
       "style": {

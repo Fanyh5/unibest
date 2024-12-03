@@ -3,5 +3,9 @@
   "category": "分类",
   "about": "关于",
   "searchPlaceholder": "请输入搜索内容",
-  "setting": "设置"
+  "setting": "设置",
+  "switchLanguages": "切换语言",
+  "aboutUs": "关于我们",
+  "personal": "个人信息",
+  "feedback": "意见反馈"
 }

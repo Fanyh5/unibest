@@ -3,5 +3,9 @@
   "category": "Classify",
   "about": "About",
   "searchPlaceholder": "Please enter your search",
-  "setting": "Settings"
+  "setting": "Settings",
+  "switchLanguages": "SwitchLanguages",
+  "aboutUs": "AboutUs",
+  "personal": "PersonalInformation",
+  "feedback": "Feedback"
 }

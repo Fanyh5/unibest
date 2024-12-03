@@ -49,12 +49,12 @@
         ></up-cell>
         <!-- #endif -->
         <up-cell title="用户注销" v-if="userStore.isLogined" center is-link @click="logoff" />
-        <up-cell title="切换语言" center :isLink="true" url="/pages/users/set/i18n" />
-        <up-cell title="意见反馈" center :isLink="true" url="/pages/index/index" />
+        <up-cell title="切换语言" isLink @click="navigateToPage('/pages/user/setting/i18n')" />
+        <up-cell title="意见反馈" isLink @click="navigateToPage('/pages/user/setting/feedback')" />
         <!-- #ifdef APP-PLUS -->
         <up-cell :title="`清除缓存(${fileSizeString})`" center @click="clearCache"></up-cell>
         <!-- #endif -->
-        <up-cell title="关于我们" center :isLink="true" url="/pages/index/index" />
+        <up-cell title="关于我们" isLink @click="navigateToPage('/pages/user/setting/about')" />
       </up-cell-group>
       <view class="absolute inset-x-0 bottom-0 h-16 px-4">
         <up-button
@@ -74,7 +74,7 @@ import { t } from '@/locale'
 import Navbar from '@/components/navbar/navbar.vue'
 import { useUserStore } from '@/store'
 import { config } from '@/types/config'
-import { navigateToLogin, quiteLoginOut } from '@/utils/filters'
+import { navigateToLogin, navigateToPage, quiteLoginOut } from '@/utils/filters'
 const userStore = useUserStore()
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()

@@ -77,7 +77,10 @@ export function navigateToLogin(
  * 返回上一页
  */
 export function handleClickLeft(): void {
-  uni.navigateBack()
+  uni
+    .navigateBack()
+    .then((r) => {})
+    .catch(() => {})
 }
 
 /**
