@@ -33,6 +33,9 @@
       },
       {
         "pagePath": "pages/message/message"
+      },
+      {
+        "pagePath": "pages/user/user"
       }
     ]
   },

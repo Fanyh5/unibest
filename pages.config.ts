@@ -37,6 +37,9 @@ export default defineUniPages({
       {
         pagePath: 'pages/message/message',
       },
+      {
+        pagePath: 'pages/user/user',
+      },
     ],
   },
 })
