@@ -8,7 +8,7 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <navbar :placeholder="true" leftIcon="">
+    <!-- <navbar leftIcon="">
       <template #center>
         <view class="flex align-center w-full px-2">
           <up-search
@@ -20,9 +20,10 @@
           <up-icon name="scan" size="28"></up-icon>
         </view>
       </template>
-    </navbar>
-    <view class="pt-2 px-4">
-      <view class="text-center mt-8">
+    </navbar> -->
+    <up-navbar :title="t('switchLanguages')" :placeholder="true" :autoBack="true"></up-navbar>
+    <view class="px-2">
+      <view class="text-center">
         当前平台是：
         <text class="text-green-500">{{ PLATFORM.platform }}</text>
       </view>
