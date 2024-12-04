@@ -7,7 +7,7 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <UNavbar :title="t('category')"></UNavbar>
+    <UNavbar :is-back="false" :title="t('category')"></UNavbar>
     <view class="u-wrap">
       <view class="u-menu-wrap">
         <scroll-view

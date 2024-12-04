@@ -7,6 +7,7 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
+    <UNavbar class="pl-2" :is-back="false" :is-fixed="true" :title="t('message')"></UNavbar>
     <!-- 消息列表 -->
     <view class="p-2">
       <up-swipe-action>
@@ -94,8 +95,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 import { t } from '@/locale'
+import UNavbar from '@/components/navbar/u-navbar.vue'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()

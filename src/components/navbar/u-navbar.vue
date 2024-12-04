@@ -9,7 +9,7 @@
       <view class="u-navbar-inner" :style="[navbarInnerStyle]">
         <view class="u-back-wrap" v-if="isBack" @tap="goBack">
           <view class="u-icon-wrap">
-            <u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
+            <up-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></up-icon>
           </view>
           <view class="u-icon-wrap u-back-text u-line-1" v-if="backText" :style="[backTextStyle]">
             {{ backText }}
@@ -90,12 +90,12 @@ export default {
     // 左边返回的图标
     backIconName: {
       type: String,
-      default: 'nav-back',
+      default: 'arrow-left',
     },
     // 左边返回图标的大小，rpx
     backIconSize: {
       type: [String, Number],
-      default: '44',
+      default: '20',
     },
     // 返回的文字提示
     backText: {
