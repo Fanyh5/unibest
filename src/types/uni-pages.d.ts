@@ -16,9 +16,11 @@ interface NavigateToOptions {
        "/pages/user/setting/feedback" |
        "/pages/user/setting/i18n" |
        "/pages/user/setting/personal" |
+       "/pages/user/tool/mission" |
        "/pages/user/tool/point" |
        "/pages/user/tool/setting" |
        "/pages/user/tool/signIn" |
+       "/pages/user/tool/test" |
        "/pages/user/tool/tool";
 }
 interface RedirectToOptions extends NavigateToOptions {}

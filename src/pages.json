@@ -127,6 +127,13 @@
       }
     },
     {
+      "path": "pages/user/tool/mission",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user/tool/point",
       "type": "page",
       "style": {
@@ -142,6 +149,13 @@
     },
     {
       "path": "pages/user/tool/signIn",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/tool/test",
       "type": "page",
       "style": {
         "navigationStyle": "custom"
