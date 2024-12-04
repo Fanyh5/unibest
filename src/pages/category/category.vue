@@ -51,8 +51,8 @@
 
 <script setup lang="ts">
 import { t } from '@/locale'
-import PLATFORM from '@/utils/platform'
 import UNavbar from '@/components/navbar/u-navbar.vue'
+const { safeAreaInsets } = uni.getSystemInfoSync()
 interface ClassifyData {
   [key: string]: any // 根据实际数据定义类型
 }
@@ -117,8 +117,6 @@ onMounted(() => {
   // 可以初始化一些数据，比如 classifyData，如果需要从 API 加载数据
   // tabbar.value = [] // 假设此数据来自 API
 })
-
-const { safeAreaInsets } = uni.getSystemInfoSync()
 </script>
 
 <style lang="scss" scoped>
