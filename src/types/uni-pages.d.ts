@@ -5,11 +5,13 @@
 
 interface NavigateToOptions {
   url: "/pages/index/index" |
+       "/pages/auth/login" |
        "/pages/category/category" |
        "/pages/error/404" |
        "/pages/message/message" |
        "/pages/public/search" |
        "/pages/user/user" |
+       "/pages/auth/method/html5Login" |
        "/pages/user/coupon/coupon" |
        "/pages/user/coupon/detail" |
        "/pages/user/setting/about" |
