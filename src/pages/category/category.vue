@@ -121,12 +121,12 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .u-wrap {
-  /* #endif */
   display: flex;
   flex-direction: column;
   height: calc(100vh);
   /* #ifdef H5 */
   height: calc(100vh - var(--window-top));
+  /* #endif */
 }
 
 .u-menu-wrap {
