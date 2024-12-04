@@ -7,20 +7,28 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <view class="bg-[#ffffff]" v-show="false">
+    <UNavbar :is-fixed="true">
+      <up-search
+        style="width: 100%"
+        v-model="params.keyword"
+        :actionText="t('cancel')"
+        :placeholder="t('searchPlaceholder')"
+      ></up-search>
+    </UNavbar>
+    <view class="bg-[#ffffff]" v-if="true">
       <view class="px-4 py-2">
-        <view class="text-base mb-2">热门搜索</view>
+        <view class="font-semibold mb-2">热门搜索</view>
         <view class="grid grid-cols-2 gap-2">
-          <view class="wes" v-for="(keyword, index) in hotKeywordList" :key="index">
+          <view v-for="(keyword, index) in hotKeywordList" :key="index" class="truncate">
             {{ keyword }}
           </view>
         </view>
       </view>
       <view class="px-4 py-2" v-if="oldKeywordList.length > 0">
-        <view class="text-base">搜索历史</view>
-        <div class="oldKeyList">
+        <view class="font-semibold">搜索历史</view>
+        <div class="flex-wrap flex">
           <div
-            class="oldKeyItem mt-2 mr-2 truncate ..."
+            class="m-2 rounded-full truncate bg-[#f0f2f5] max-w-28 px-2"
             v-for="(keyword, index) in oldKeywordList"
             :key="index"
           >
@@ -38,7 +46,7 @@
       </div>
     </view>
     <!-- 搜索 -->
-    <view>
+    <view v-else>
       <view class="navbar">
         <view class="nav-item" :class="{ current: filterIndex === 0 }" @click="tabClick(0)">
           综合排序
@@ -115,6 +123,9 @@
 
 <script lang="ts" setup>
 // 获取屏幕边界到安全区域距离
+import { t } from '@/locale'
+import UNavbar from '@/components/navbar/u-navbar.vue'
+
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
 const searchQuery = ref<string>('')
@@ -168,44 +179,6 @@ watch(searchQuery, (newValue) => {
 $light-color: #ff6b35ff;
 $font-color-dark: #303133ff;
 
-.search-box {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  --wot-search-padding: 0;
-  --wot-search-side-padding: 0;
-  :deep() {
-    .wd-search {
-      background: transparent;
-    }
-  }
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-}
-
-.results {
-  flex: 1;
-  padding: 10px;
-}
-
-.no-results {
-  color: #999;
-  text-align: center;
-}
-.oldKeyList {
-  display: flex;
-  flex-wrap: wrap;
-  .oldKeyItem {
-    max-width: 114px;
-    padding: 2px 13px;
-    background: #f0f2f5;
-    border-radius: 100px;
-  }
-}
-
 .navbar {
   z-index: 10;
   display: flex;
@@ -243,22 +216,6 @@ $font-color-dark: #303133ff;
   .p-box {
     display: flex;
     flex-direction: column;
-
-    .yticon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 30rpx;
-      height: 14rpx;
-      margin-left: 4rpx;
-      font-size: 26rpx;
-      line-height: 1;
-      color: #888;
-    }
-
-    .xia {
-      transform: scaleY(-1);
-    }
   }
 }
 .img {
