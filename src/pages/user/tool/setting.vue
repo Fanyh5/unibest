@@ -7,7 +7,7 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <navbar :placeholder="true" :title="t('setting')"></navbar>
+    <UNavbar :title="t('setting')"></UNavbar>
     <view class="pt-2 mt-8">
       <up-cell-group>
         <up-cell
@@ -71,7 +71,7 @@
 
 <script lang="ts" setup>
 import { t } from '@/locale'
-import Navbar from '@/components/navbar/navbar.vue'
+import UNavbar from '@/components/navbar/u-navbar.vue'
 import { useUserStore } from '@/store'
 import { config } from '@/types/config'
 import { navigateToLogin, navigateToPage, quiteLoginOut } from '@/utils/filters'
