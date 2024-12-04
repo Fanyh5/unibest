@@ -8,20 +8,23 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <!-- <navbar leftIcon="">
-      <template #center>
-        <view class="flex align-center w-full px-2">
-          <up-search
-            v-model="keyword"
-            :show-action="false"
-            :placeholder="t('searchPlaceholder')"
-            :showAction="false"
-          ></up-search>
+    <UNavbar class="pl-2" :is-back="false" :is-fixed="true">
+      <up-search
+        style="width: 100%"
+        v-model="keyword"
+        :show-action="false"
+        :placeholder="t('searchPlaceholder')"
+        :showAction="false"
+      ></up-search>
+      <!-- #ifndef H5 -->
+      <!-- 扫码功能 不兼容h5 详情文档: https://uniapp.dcloud.io/api/system/barcode?id=scancode -->
+      <template v-slot:right>
+        <div class="navbar-right">
           <up-icon name="scan" size="28"></up-icon>
-        </view>
+        </div>
       </template>
-    </navbar> -->
-    <up-navbar :title="t('switchLanguages')" :placeholder="true" :autoBack="true"></up-navbar>
+      <!-- #endif -->
+    </UNavbar>
     <view class="px-2">
       <view class="text-center">
         当前平台是：
@@ -33,9 +36,7 @@
 
 <script lang="ts" setup>
 import { t } from '@/locale'
-// #ifdef MP
-import Navbar from '@/components/navbar/navbar.vue'
-// #endif
+import UNavbar from '@/components/navbar/u-navbar.vue'
 import PLATFORM from '@/utils/platform'
 
 defineOptions({
