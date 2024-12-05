@@ -10,12 +10,15 @@
   <view class="overflow-hidden pt-2 px-4" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
     <div v-if="!wechatLogin">
       <!--   滑动验证码   -->
+      <html5Login></html5Login>
     </div>
     <view v-else></view>
   </view>
 </template>
 
 <script setup lang="ts">
+import html5Login from '@/pages/auth/method/html5Login.vue'
+
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
 // 微信登录标志
