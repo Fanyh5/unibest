@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <UNavbar :is-back="false" :title="t('wechatH5Login')"></UNavbar>
+    <UNavbar :title="t('wechatH5Login')"></UNavbar>
     <view class="wx-auth-container">
       <div class="box">
         <view class="logo-info">

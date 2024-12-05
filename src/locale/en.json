@@ -14,5 +14,6 @@
   "coupon": "My Coupon",
   "mission": "Mission Center",
   "cancel": "Cancel",
-  "wechatH5Login": "LogInToThePublicWebsite"
+  "wechatH5Login": "LogInToThePublicWebsite",
+  "wechatMPLogin": "MiniProgramLogin"
 }
