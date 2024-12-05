@@ -99,6 +99,13 @@
       "type": "page"
     },
     {
+      "path": "pages/auth/method/wechatMPLogin",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user/coupon/coupon",
       "type": "page",
       "style": {
