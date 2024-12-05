@@ -7,7 +7,13 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <UNavbar class="pl-2" :is-back="false" :is-fixed="true" :title="t('message')"></UNavbar>
+    <UNavbar class="pl-2" :is-back="false" :is-fixed="true" :title="t('message')">
+      <template v-slot:right>
+        <view class="px-2">
+          <up-icon @click="showOper = true" name="more-dot-fill"></up-icon>
+        </view>
+      </template>
+    </UNavbar>
     <!-- 消息列表 -->
     <view class="p-2">
       <up-swipe-action>
@@ -51,7 +57,7 @@
 
     <!-- 底部操作栏 -->
     <view
-      class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between h-[100rpx] p-7 bg-white shadow-lg"
+      class="fixed bottom-0 left-0 right-0 z-99999 flex items-center justify-between h-[80rpx] px-5 bg-white shadow-lg"
       v-if="isEdit"
       :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }"
     >
@@ -61,20 +67,25 @@
       </view>
       <view class="flex items-center">
         <view class="mx-2">
-          <u-button type="error" @click="deleteSelected" :disabled="!selectedMessages.length">
+          <up-button
+            type="error"
+            size="mini"
+            @click="deleteSelected"
+            :disabled="!selectedMessages.length"
+          >
             删除
-          </u-button>
+          </up-button>
         </view>
         <view class="ml-2">
-          <u-button type="info" @click="isEdit = false">取消</u-button>
+          <up-button type="info" size="mini" @click="isEdit = false">取消</up-button>
         </view>
       </view>
     </view>
 
     <!-- 底部弹出菜单 -->
-    <u-popup v-model="showOper" mode="bottom" :round="10" :safe-area-inset-bottom="true">
-      <u-cell-group>
-        <u-cell
+    <up-popup :show="showOper" mode="bottom" :round="10">
+      <up-cell-group>
+        <up-cell
           title="批量删除"
           @click="
             () => {
@@ -82,15 +93,14 @@
               isEdit = true
             }
           "
-          isLink
         />
-        <u-cell title="全部标记为已读" @click="markAllAsRead" isLink />
-        <u-cell title="取消" @click="showOper = false" isLink />
-      </u-cell-group>
-    </u-popup>
+        <up-cell title="全部标记为已读" @click="markAllAsRead" />
+        <up-cell title="取消" @click="showOper = false" />
+      </up-cell-group>
+    </up-popup>
 
     <!-- 空状态 -->
-    <u-empty v-if="!messageList.length" mode="message" text="暂无消息" />
+    <up-empty v-if="!messageList.length" mode="message" text="暂无消息" />
   </view>
 </template>
 
@@ -100,18 +110,6 @@ import UNavbar from '@/components/navbar/u-navbar.vue'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
-
-// #ifndef H5
-// 获取窗口信息
-const windowInfo = uni.getWindowInfo()
-// #endif
-
-// #ifdef MP-WEIXIN
-// 获取胶囊左边界坐标
-const { left } = uni.getMenuButtonBoundingClientRect()
-// 计算胶囊(包括右边距)占据屏幕的总宽度：屏幕宽度-胶囊左边界坐标
-const rightSafeArea = windowInfo.windowWidth - left
-// #endif
 
 const options = ref<any[]>([
   {
