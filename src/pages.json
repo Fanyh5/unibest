@@ -48,6 +48,14 @@
       }
     },
     {
+      "path": "pages/auth/login",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
       "path": "pages/category/category",
       "type": "page",
       "style": {
@@ -77,6 +85,21 @@
     },
     {
       "path": "pages/user/user",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/auth/method/html5Login",
+      "type": "page"
+    },
+    {
+      "path": "pages/auth/method/wechatH5Login",
+      "type": "page"
+    },
+    {
+      "path": "pages/auth/method/wechatMPLogin",
       "type": "page",
       "style": {
         "navigationStyle": "custom"
@@ -150,6 +173,7 @@
     {
       "path": "pages/user/tool/signIn",
       "type": "page",
+      "needLogin": true,
       "style": {
         "navigationStyle": "custom"
       }

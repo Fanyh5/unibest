@@ -6,6 +6,7 @@
  */
 import { useUserStore } from '@/store'
 import { getNeedLoginPages, needLoginPages as _needLoginPages } from '@/utils'
+import { navigateToLogin } from '@/utils/filters'
 
 // TODO Check
 const loginRoute = '/pages/login/index'
@@ -35,12 +36,24 @@ const navigateToInterceptor = {
       return true
     }
     const hasLogin = isLogined()
-    if (hasLogin) {
-      return true
+    if (!hasLogin) {
+      uni.showModal({
+        title: '提示',
+        content: '当前用户未登录，是否登录？',
+        showCancel: true,
+        cancelText: '取消',
+        confirmText: '登录',
+        success: function (res) {
+          if (res.confirm) {
+            navigateToLogin(url)
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        },
+      })
+      return false
     }
-    const redirectRoute = `${loginRoute}?redirect=${encodeURIComponent(url)}`
-    uni.navigateTo({ url: redirectRoute })
-    return false
+    return true
   },
 }
 
