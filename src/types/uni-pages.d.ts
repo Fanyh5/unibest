@@ -12,6 +12,7 @@ interface NavigateToOptions {
        "/pages/public/search" |
        "/pages/user/user" |
        "/pages/auth/method/html5Login" |
+       "/pages/auth/method/wechatH5Login" |
        "/pages/user/coupon/coupon" |
        "/pages/user/coupon/detail" |
        "/pages/user/setting/about" |

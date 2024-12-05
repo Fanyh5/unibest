@@ -13,5 +13,6 @@
   "signIn": "签到",
   "coupon": "我的优惠券",
   "mission": "任务中心",
-  "cancel": "取消"
+  "cancel": "取消",
+  "wechatH5Login": "公众网页登录"
 }

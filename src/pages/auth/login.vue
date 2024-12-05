@@ -12,12 +12,15 @@
       <!--   滑动验证码   -->
       <html5Login></html5Login>
     </div>
-    <view v-else></view>
+    <view v-else>
+      <wechatH5Login />
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import html5Login from '@/pages/auth/method/html5Login.vue'
+import wechatH5Login from '@/pages/auth/method/wechatH5Login.vue'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 

@@ -95,6 +95,10 @@
       "type": "page"
     },
     {
+      "path": "pages/auth/method/wechatH5Login",
+      "type": "page"
+    },
+    {
       "path": "pages/user/coupon/coupon",
       "type": "page",
       "style": {
