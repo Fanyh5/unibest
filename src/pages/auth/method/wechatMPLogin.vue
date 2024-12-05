@@ -17,28 +17,33 @@
         <view>您的公开信息（昵称、头像）</view>
       </view>
       <view class="btns">
-        <wd-button class="mb-4" block size="large" :disabled="logingFlag" @click="getUserProfile()">
+        <up-button class="mb-4" block size="large" :disabled="logingFlag" @click="getUserProfile()">
           登录
-        </wd-button>
+        </up-button>
         <div style="height: 16rpx"></div>
-        <wd-button block size="large" @click="backToHome()" type="info">暂不登录</wd-button>
+        <up-button block size="large" @click="backToHome()" type="info">暂不登录</up-button>
       </view>
-      <div class="privacy">
-        <wd-checkbox v-model="checked" prop="read" custom-label-class="label-class">
-          <div class="flex">
-            阅读并同意
-            <wd-text
-              type="warning"
-              text="《隐私协议》"
+      <!-- 隐私协议 -->
+      <div class="flex mt-4 px-2">
+        <checkbox-group @change="checkboxChange">
+          <checkbox :checked="enablePrivacy" style="transform: scale(0.7)" />
+          <text class="privacy-tips">
+            登录即代表您已同意
+            <text
               @click="navigateTo('/pages/mine/help/tips?type=PRIVACY_POLICY')"
-            ></wd-text>
-            <wd-text
-              type="warning"
-              text="《用户协议》"
+              style="color: #ff6b35"
+            >
+              《隐私协议》
+            </text>
+            <text
               @click="navigateTo('/pages/mine/help/tips?type=USER_AGREEMENT')"
-            ></wd-text>
-          </div>
-        </wd-checkbox>
+              style="color: #ff6b35"
+            >
+              《用户协议》
+            </text>
+            并授权使用您的账号信息（如昵称、头像、收获地址）以便您统一管理
+          </text>
+        </checkbox-group>
       </div>
     </view>
   </view>
@@ -49,7 +54,7 @@ import { t } from '@/locale'
 import UNavbar from '@/components/navbar/u-navbar.vue'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
-
+const enablePrivacy = ref(false)
 // 状态变量
 const lightColor = ref('')
 const checked = ref(false)
@@ -139,6 +144,11 @@ const getPhoneNumber = (e: any) => {
   //   return;
   // }
   // 示例：请求后端登录接口（占位实现）
+}
+
+// 隐私协议勾选
+function checkboxChange(e) {
+  enablePrivacy.value = e.detail.value.length > 0
 }
 </script>
 <style lang="scss" scoped>
