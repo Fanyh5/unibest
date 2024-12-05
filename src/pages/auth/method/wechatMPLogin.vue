@@ -7,21 +7,21 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <UNavbar :title="t('wechatMPLogin')"></UNavbar>
+    <UNavbar :borderBottom="false" :title="t('wechatMPLogin')"></UNavbar>
     <view class="wx-auth-container px-4">
       <view class="logo-info">
-        <text class="title">欢迎进入{{ projectName }}</text>
+        <text class="title">欢迎进入{{ config.name }}</text>
       </view>
       <view class="small-tips">
-        <view>为您提供优质服务,{{ projectName }}需要获取以下信息</view>
+        <view>为您提供优质服务,{{ config.name }}需要获取以下信息</view>
         <view>您的公开信息（昵称、头像）</view>
       </view>
-      <view class="btns">
-        <up-button class="mb-4" block size="large" :disabled="logingFlag" @click="getUserProfile()">
+      <view class="w-full mt-12">
+        <up-button type="primary" size="large" :disabled="logingFlag" @click="getUserProfile()">
           登录
         </up-button>
         <div style="height: 16rpx"></div>
-        <up-button block size="large" @click="backToHome()" type="info">暂不登录</up-button>
+        <up-button block size="large" @click="navigateToPage('/')" type="info">暂不登录</up-button>
       </view>
       <!-- 隐私协议 -->
       <div class="flex mt-4 px-2">
@@ -30,13 +30,13 @@
           <text class="privacy-tips">
             登录即代表您已同意
             <text
-              @click="navigateTo('/pages/mine/help/tips?type=PRIVACY_POLICY')"
+              @click="navigateToPage('/pages/mine/help/tips?type=PRIVACY_POLICY')"
               style="color: #ff6b35"
             >
               《隐私协议》
             </text>
             <text
-              @click="navigateTo('/pages/mine/help/tips?type=USER_AGREEMENT')"
+              @click="navigateToPage('/pages/mine/help/tips?type=USER_AGREEMENT')"
               style="color: #ff6b35"
             >
               《用户协议》
@@ -52,13 +52,12 @@
 <script setup lang="ts">
 import { t } from '@/locale'
 import UNavbar from '@/components/navbar/u-navbar.vue'
+import { navigateToPage } from '@/utils/filters'
+import { config } from '@/types/config'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const enablePrivacy = ref(false)
 // 状态变量
-const lightColor = ref('')
-const checked = ref(false)
-const configs = ref('config')
 const phoneAuthPopup = ref(false) // 手机号授权弹窗
 const projectName = ref('lilishop') // 商城名称
 const code = ref('') // 微信返回的 code
@@ -87,22 +86,9 @@ onMounted(() => {
   })
 })
 
-function navigateTo(url: string) {
-  uni.navigateTo({
-    url,
-  })
-}
-
-// 返回首页
-const backToHome = () => {
-  uni.switchTab({
-    url: `/pages/tabbar/home/index`,
-  })
-}
-
 // 获取用户信息
 const getUserProfile = () => {
-  if (!checked.value) {
+  if (!enablePrivacy.value) {
     uni.showToast({
       title: '请勾选协议',
       icon: 'none',
@@ -147,7 +133,7 @@ const getPhoneNumber = (e: any) => {
 }
 
 // 隐私协议勾选
-function checkboxChange(e) {
+function checkboxChange(e: any): void {
   enablePrivacy.value = e.detail.value.length > 0
 }
 </script>
@@ -189,11 +175,6 @@ text.shop {
   margin: 0 0 20rpx;
   font-size: 24rpx;
   color: #999;
-}
-
-.btns {
-  width: 100%;
-  margin-top: 100rpx;
 }
 
 .privacy {
