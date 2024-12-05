@@ -60,14 +60,14 @@
     <!-- 帐号密码登录 -->
     <div v-show="enableUserPwdBox">
       <view class="content">
-        <input class="u-border-bottom" v-model="userData.username" placeholder="请输入用户名" />
+        <input class="u-border-bottom" v-model="userLogin.username" placeholder="请输入用户名" />
         <input
           class="u-border-bottom mt-5"
           :showPassword="true"
-          v-model="userData.password"
+          v-model="userLogin.password"
           placeholder="请输入密码"
         />
-        <button @tap="passwordLogin" class="getCaptcha">登录</button>
+        <button @tap="userLoginFun" class="getCaptcha">登录</button>
         <view class="alternative">
           <view></view>
           <view class="issue">遇到问题</view>
@@ -104,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { sendMobile, userLogin } from '@/service/index/auth'
+import { sendMobileApi, userLoginApi } from '@/service/index/auth'
 import { useUserStore } from '@/store'
 import { currRoute } from '@/utils'
 
@@ -116,7 +116,7 @@ const flage = ref(false)
 const codeFlag = ref(true)
 const tips = ref('')
 const enableUserPwdBox = ref(false)
-const current = ref(1)
+const current = ref(0)
 const seconds = ref(60)
 const enablePrivacy = ref(false)
 const mobile = ref('')
@@ -125,7 +125,7 @@ const codeError = ref(false)
 const uCodeRef = ref(null)
 const reacquire = ref(false)
 // 用户数据
-const userData = reactive({
+const userLogin = reactive({
   username: '',
   password: '',
 })
@@ -205,7 +205,7 @@ const finish = (value: string) => {
 }
 
 /** 密码登录 */
-function passwordLogin() {
+function userLoginFun() {
   if (!enablePrivacy.value) {
     uni.showToast({
       title: '请同意用户隐私',
@@ -215,7 +215,7 @@ function passwordLogin() {
     return false
   }
 
-  if (!userData.username) {
+  if (!userLogin.username) {
     uni.showToast({
       title: '请填写用户名',
       duration: 2000,
@@ -224,7 +224,7 @@ function passwordLogin() {
     return false
   }
 
-  if (!userData.password) {
+  if (!userLogin.password) {
     uni.showToast({
       title: '请填写密码',
       duration: 2000,
@@ -233,10 +233,10 @@ function passwordLogin() {
     return false
   }
 
-  const params = JSON.parse(JSON.stringify(userData))
-  userLogin(params, 'H5').then((res: IResData<any>) => {
+  const params = JSON.parse(JSON.stringify(userLogin))
+  userLoginApi(params, 'H5').then((res: IResData<any>) => {
     if (res.code === 0) {
-      // userStore.setUserInfo({ userInfo: res.data.userInfo, token: res.data.token })
+      userStore.setUserInfo({ userInfo: res.data.userInfo, token: res.data.token })
       const { query } = currRoute()
       uni.redirectTo({ url: query.redirect })
     } else {
@@ -272,7 +272,7 @@ watch(
       if (enableUserPwdBox.value) {
         return
       }
-      const res = await sendMobile(mobile.value)
+      const res = await sendMobileApi(mobile.value)
     }
   },
 )

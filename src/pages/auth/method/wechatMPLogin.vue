@@ -21,7 +21,9 @@
           登录
         </up-button>
         <div style="height: 16rpx"></div>
-        <up-button block size="large" @click="navigateToPage('/')" type="info">暂不登录</up-button>
+        <up-button block size="large" @click="navigateToPage('/', 'switchTab')" type="info">
+          暂不登录
+        </up-button>
       </view>
       <!-- 隐私协议 -->
       <div class="flex mt-4 px-2">

@@ -4,7 +4,7 @@ import { http } from '@/utils/http'
  * @params  password
  * @params  username
  */
-export const userLogin = (params: any, clientType: string) => {
+export const userLoginApi = (params: any, clientType: string) => {
   return http<any>({
     method: 'POST',
     url: `/api/login`,
@@ -20,7 +20,7 @@ export const userLogin = (params: any, clientType: string) => {
  * @param params
  * @param clientType
  */
-export function smsLogin(params: any, clientType: string): Promise<IResData<unknown>> {
+export function smsLoginApi(params: any, clientType: string): Promise<IResData<unknown>> {
   return http.post(`/passport/member/smsLogin`, params, {
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
@@ -34,6 +34,6 @@ export function smsLogin(params: any, clientType: string): Promise<IResData<unkn
  * @param  mobile
  * @param type
  */
-export function sendMobile(mobile: string, type: string = 'LOGIN') {
+export function sendMobileApi(mobile: string, type: string = 'LOGIN') {
   return http.get(`/common/sms/${type}/${mobile}`)
 }
