@@ -8,7 +8,7 @@
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
     <UNavbar :title="t('setting')"></UNavbar>
-    <view class="pt-2 mt-8">
+    <view>
       <up-cell-group>
         <up-cell
           :isLink="true"
