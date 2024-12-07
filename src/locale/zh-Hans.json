@@ -16,5 +16,8 @@
   "cancel": "取消",
   "wechatH5Login": "公众网页登录",
   "wechatMPLogin": "小程序登录",
-  "security": "安全设置"
+  "security": "安全设置",
+  "changePassword": "修改密码",
+  "bindPhone": "绑定手机号",
+  "bindEmail": "绑定邮箱"
 }

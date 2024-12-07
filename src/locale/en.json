@@ -16,5 +16,8 @@
   "cancel": "Cancel",
   "wechatH5Login": "LogInToThePublicWebsite",
   "wechatMPLogin": "MiniProgramLogin",
-  "security": "SecuritySettings"
+  "security": "SecuritySettings",
+  "changePassword": "ChangePassword",
+  "bindPhone": "BindPhone",
+  "bindEmail": "BindEmail"
 }

@@ -10,32 +10,27 @@
   <view class="overflow-hidden" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
     <up-navbar :title="t('personal')" :placeholder="true" :autoBack="true" />
 
-    <view class="bg-[#fff]">
-      <u-cell-group>
-        <u-cell title="头像" @click="handleEditAvatar" :isLink="true">
-          <template #right-icon>
-            <u-avatar :src="userInfo.avatar || defaultAvatar" size="35" shape="circle" />
-          </template>
-        </u-cell>
+    <u-form :model="userInfo" ref="uForm">
+      <u-form-item label="头像" @click="handleEditAvatar">
+        <u-avatar :src="userInfo.avatar || defaultAvatar" size="35" shape="circle" />
+        <u-icon name="arrow-right" color="#969799" size="16" />
+      </u-form-item>
 
-        <u-cell
-          title="昵称"
-          :value="userInfo?.nickname"
-          @click="handleEditNickname"
-          :isLink="true"
-        />
-        <u-cell
-          title="用户名"
-          :value="userInfo?.username"
-          @click="handleEditNickname"
-          :isLink="true"
-        />
+      <u-form-item label="昵称" @click="handleEditNickname">
+        <u-input v-model="userInfo.nickname" disabled placeholder="请输入昵称" />
+        <u-icon name="arrow-right" color="#969799" size="16" />
+      </u-form-item>
 
-        <u-cell title="手机号码" :value="formatPhone(userInfo.phone)" :isLink="true" />
+      <!--      <u-form-item label="用户名" @click="handleEditNickname">-->
+      <!--        <u-input v-model="userInfo.username" disabled placeholder="请输入用户名" />-->
+      <!--        <u-icon name="arrow-right" color="#969799" size="16" />-->
+      <!--      </u-form-item>-->
 
-        <u-cell title="性别" :value="genderLabel" @click="showGenderPicker = true" :isLink="true" />
-      </u-cell-group>
-    </view>
+      <u-form-item label="性别" @click="showGenderPicker = true">
+        <u-input v-model="genderLabel" disabled placeholder="请选择性别" />
+        <u-icon name="arrow-right" color="#969799" size="16" />
+      </u-form-item>
+    </u-form>
 
     <!-- 性别选择器 -->
     <up-picker
@@ -61,6 +56,7 @@ const userStore = useUserStore()
 const userInfo = ref<any>(userStore.userInfo)
 const defaultAvatar = '/static/images/default-avatar.png'
 const uToast = ref()
+const uForm = ref()
 
 // 性别选择相关
 const showGenderPicker = ref(false)
@@ -116,4 +112,10 @@ const handleGenderConfirm = async ([gender]) => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+:deep(.u-form-item) {
+  padding: 10px 16px;
+  margin-bottom: 1px;
+  background: #fff;
+}
+</style>
