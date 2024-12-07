@@ -19,5 +19,12 @@
   "security": "SecuritySettings",
   "changePassword": "ChangePassword",
   "bindPhone": "BindPhone",
-  "bindEmail": "BindEmail"
+  "bindEmail": "BindEmail",
+  "oldPassword": "Old Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "pleaseInputOldPassword": "Please enter old password",
+  "pleaseInputNewPassword": "Please enter new password",
+  "pleaseConfirmNewPassword": "Please confirm new password",
+  "confirm": "Confirm"
 }

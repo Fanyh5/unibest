@@ -55,7 +55,43 @@
       :round="10"
     >
       <view class="popup-content">
-        <!-- 密码修改表单 -->
+        <view class="popup-header">
+          <text class="popup-title">{{ t('changePassword') }}</text>
+          <u-icon name="close" size="20" @click="showPasswordPopup = false"></u-icon>
+        </view>
+
+        <u-form :model="passwordForm" labelAlign="right" labelWidth="auto" ref="passwordFormRef">
+          <u-form-item :label="t('oldPassword')" prop="oldPassword">
+            <u-input
+              border="none"
+              v-model="passwordForm.oldPassword"
+              type="password"
+              :placeholder="t('pleaseInputOldPassword')"
+            />
+          </u-form-item>
+
+          <u-form-item :label="t('newPassword')" prop="newPassword">
+            <u-input
+              border="none"
+              v-model="passwordForm.newPassword"
+              type="password"
+              :placeholder="t('pleaseInputNewPassword')"
+            />
+          </u-form-item>
+
+          <u-form-item :label="t('confirmPassword')" prop="confirmPassword">
+            <u-input
+              border="none"
+              v-model="passwordForm.confirmPassword"
+              type="password"
+              :placeholder="t('pleaseConfirmNewPassword')"
+            />
+          </u-form-item>
+        </u-form>
+
+        <view class="popup-footer">
+          <u-button type="primary" @click="handleChangePassword">{{ t('confirm') }}</u-button>
+        </view>
       </view>
     </up-popup>
 
@@ -88,6 +124,58 @@ const userStore = useUserStore()
 const showPasswordPopup = ref(false)
 const showPhonePopup = ref(false)
 const showEmailPopup = ref(false)
+
+// 密码表单
+const passwordFormRef = ref()
+const passwordForm = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+})
+
+// 密码表单校验规则
+// const passwordRules = {
+//   oldPassword: [
+//     { required: true, message: t('pleaseInputOldPassword') },
+//     { min: 6, message: t('passwordLengthTip') },
+//   ],
+//   newPassword: [
+//     { required: true, message: t('pleaseInputNewPassword') },
+//     { min: 6, message: t('passwordLengthTip') },
+//   ],
+//   confirmPassword: [
+//     { required: true, message: t('pleaseConfirmNewPassword') },
+//     {
+//       validator: (rule: any, value: string, callback: Function) => {
+//         if (value !== passwordForm.value.newPassword) {
+//           callback(new Error(t('passwordNotMatch')))
+//         } else {
+//           callback()
+//         }
+//       },
+//     },
+//   ],
+// }
+
+// 修改密码
+const handleChangePassword = async () => {
+  try {
+    await passwordFormRef.value.validate()
+    // TODO: 调用修改密码API
+    uni.showToast({
+      title: t('changePasswordSuccess'),
+      icon: 'success',
+    })
+    showPasswordPopup.value = false
+    passwordForm.value = {
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 // 手机号脱敏
 const maskPhone = (phone: string) => {
@@ -144,6 +232,21 @@ const maskEmail = (email: string) => {
 .popup-content {
   min-height: 300px;
   padding: 20px;
-  background: #fff;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .popup-title {
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.popup-footer {
+  margin-top: 30px;
 }
 </style>

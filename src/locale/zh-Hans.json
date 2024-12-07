@@ -19,5 +19,12 @@
   "security": "安全设置",
   "changePassword": "修改密码",
   "bindPhone": "绑定手机号",
-  "bindEmail": "绑定邮箱"
+  "bindEmail": "绑定邮箱",
+  "oldPassword": "原密码",
+  "newPassword": "新密码",
+  "confirmPassword": "确认密码",
+  "pleaseInputOldPassword": "请输入原密码",
+  "pleaseInputNewPassword": "请输入新密码",
+  "pleaseConfirmNewPassword": "请确认新密码",
+  "confirm": "确认"
 }
