@@ -20,6 +20,7 @@ interface NavigateToOptions {
        "/pages/user/setting/feedback" |
        "/pages/user/setting/i18n" |
        "/pages/user/setting/personal" |
+       "/pages/user/setting/security" |
        "/pages/user/tool/mission" |
        "/pages/user/tool/point" |
        "/pages/user/tool/setting" |

@@ -25,16 +25,6 @@
 <script lang="ts" setup>
 const toolList = [
   {
-    title: '地址管理',
-    icon: '/static/mine/myaddress.png',
-    url: '/pages/mine/address/addressManage',
-  },
-  {
-    title: '我的足迹',
-    icon: '/static/mine/logistics.png',
-    url: '/pages/mine/myTracks',
-  },
-  {
     title: '我的评价',
     icon: '/static/mine/feedback.png',
     url: '/pages/order/evaluate/myEvaluate',
@@ -75,11 +65,6 @@ const toolList = [
     url: '/pages/cart/coupon/couponCenter',
   },
   {
-    title: '砍价记录',
-    icon: '/static/mine/kanjia.png',
-    url: '/pages/promotion/bargain/log',
-  },
-  {
     title: '意见反馈',
     icon: '/static/mine/feedback.png',
     url: '/pages/mine/set/feedBack',
@@ -87,12 +72,7 @@ const toolList = [
   {
     title: '关于',
     icon: '/static/mine/pointgift.png',
-    url: '/pages/mine/set/editionIntro',
-  },
-  {
-    title: '店铺入驻',
-    icon: '/static/mine/feedback.png',
-    url: '/pages/passport/entry/seller/index',
+    url: '/pages/user/setting/about',
   },
   {
     title: '设置',

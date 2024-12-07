@@ -15,5 +15,6 @@
   "mission": "Mission Center",
   "cancel": "Cancel",
   "wechatH5Login": "LogInToThePublicWebsite",
-  "wechatMPLogin": "MiniProgramLogin"
+  "wechatMPLogin": "MiniProgramLogin",
+  "security": "SecuritySettings"
 }

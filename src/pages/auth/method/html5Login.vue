@@ -109,7 +109,6 @@ import { useUserStore } from '@/store'
 import { currRoute } from '@/utils'
 
 const userStore = useUserStore()
-const { safeAreaInsets } = uni.getSystemInfoSync()
 
 // 状态管理
 const flage = ref(false)
@@ -126,8 +125,8 @@ const uCodeRef = ref(null)
 const reacquire = ref(false)
 // 用户数据
 const userLogin = reactive({
-  username: '',
-  password: '',
+  username: 'test',
+  password: '123qwe',
 })
 
 // 登录标题配置
@@ -237,8 +236,7 @@ function userLoginFun() {
   userLoginApi(params, 'H5').then((res: IResData<any>) => {
     if (res.code === 0) {
       userStore.setUserInfo({ userInfo: res.data.userInfo, token: res.data.token })
-      const { query } = currRoute()
-      uni.redirectTo({ url: query.redirect })
+      uni.switchTab({ url: '/' })
     } else {
       uni.showToast({
         title: res.message,

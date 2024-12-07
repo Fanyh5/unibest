@@ -8,7 +8,7 @@
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
     <UNavbar :title="t('setting')"></UNavbar>
-    <view class="pt-2 mt-8">
+    <view>
       <up-cell-group>
         <up-cell
           :isLink="true"
@@ -44,8 +44,8 @@
           title="安全中心"
           v-if="userStore.isLogined"
           center
-          :isLink="true"
-          url="/pages/users/security/index"
+          isLink
+          @click="navigateToPage('/pages/user/setting/security')"
         ></up-cell>
         <!-- #endif -->
         <up-cell title="用户注销" v-if="userStore.isLogined" center is-link @click="logoff" />
@@ -75,7 +75,7 @@ import UNavbar from '@/components/navbar/u-navbar.vue'
 import { useUserStore } from '@/store'
 import { config } from '@/types/config'
 import { navigateToLogin, navigateToPage, quiteLoginOut } from '@/utils/filters'
-const userStore = useUserStore()
+const userStore: any = useUserStore()
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 

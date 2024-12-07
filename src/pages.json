@@ -150,6 +150,13 @@
       }
     },
     {
+      "path": "pages/user/setting/security",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user/tool/mission",
       "type": "page",
       "style": {
