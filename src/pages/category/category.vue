@@ -7,7 +7,20 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <UNavbar :is-back="false" :title="t('category')"></UNavbar>
+    <UNavbar :is-back="false">
+      <div class="title">{{ t('category') }}</div>
+      <!-- #ifdef H5 -->
+      <up-search class="nav-search" placeholder="搜索商品" :show-action="false"></up-search>
+      <!-- #endif -->
+      <!-- #ifndef H5 -->
+      <up-search
+        class="nav-search"
+        disabled
+        placeholder="搜索商品"
+        :show-action="false"
+      ></up-search>
+      <!-- #endif -->
+    </UNavbar>
     <view class="u-wrap">
       <view class="u-menu-wrap">
         <scroll-view
@@ -120,6 +133,12 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+/* 解决小程序和app滚动条的问题 */
+/* #ifdef MP-WEIXIN || APP-PLUS */
+::-webkit-scrollbar {
+  display: none;
+}
+/* #endif */
 .u-wrap {
   display: flex;
   flex-direction: column;
@@ -128,7 +147,16 @@ onMounted(() => {
   height: calc(100vh - var(--window-top));
   /* #endif */
 }
-
+.nav-search {
+  padding-right: 20rpx !important;
+  padding-left: 30rpx !important;
+}
+.title {
+  display: block;
+  width: 259rpx;
+  font-size: 28rpx;
+  text-align: center;
+}
 .u-menu-wrap {
   display: flex;
   flex: 1;

@@ -144,7 +144,6 @@
     {
       "path": "pages/user/setting/personal",
       "type": "page",
-      "needLogin": true,
       "style": {
         "navigationStyle": "custom"
       }

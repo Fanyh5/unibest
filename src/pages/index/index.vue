@@ -8,15 +8,15 @@
 </route>
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <UNavbar class="pl-2" :is-back="false" :is-fixed="true">
-      <up-search
-        style="width: 100%"
-        v-model="keyword"
-        :show-action="false"
-        :placeholder="t('searchPlaceholder')"
-      ></up-search>
+    <UNavbar :is-back="false" :is-fixed="true">
+      <view class="px-2" style="width: 100%">
+        <up-search
+          v-model="keyword"
+          :show-action="false"
+          :placeholder="t('searchPlaceholder')"
+        ></up-search>
+      </view>
       <!-- #ifndef H5 -->
-      <!-- 扫码功能 不兼容h5 详情文档: https://uniapp.dcloud.io/api/system/barcode?id=scancode -->
       <template v-slot:right>
         <div class="navbar-right" @click="scan">
           <up-icon name="scan" size="28"></up-icon>
