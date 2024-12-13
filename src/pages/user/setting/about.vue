@@ -9,8 +9,8 @@
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
     <up-navbar :title="t('aboutUs')" :placeholder="true" :autoBack="true"></up-navbar>
     <view class="edition-intro pt-12">
-      <image :src="config.logo" class="logo" />
-      <h1>{{ config.name }}</h1>
+      <image :src="imageSrc($inits.logo)" class="logo" />
+      <h1>{{ $inits.name }}</h1>
       <view class="version">
         <!-- #ifdef APP-PLUS -->
         Version {{ localVersion.version }}
@@ -62,9 +62,12 @@
 
 <script setup lang="ts">
 import { t } from '@/locale'
+import { imageSrc } from '@/utils'
+import { useInitsStore } from '@/store'
 import { config } from '@/types/config'
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
+const $inits = useInitsStore()
 const IosWhether = ref(false) // 是否是ios
 const editionHistory = ref([]) // 版本历史
 const versionData = ref<any>({}) // 版本信息

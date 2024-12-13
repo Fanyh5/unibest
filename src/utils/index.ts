@@ -1,6 +1,14 @@
 import { pages, subPackages, tabBar } from '@/pages.json'
 import { isMp } from './platform'
 
+// 获取项目图片地址
+export const imageSrc = (path: string): string => {
+  if (path === '') {
+    path = '/logo.png'
+  }
+  return getEvnBaseUrl() + `${path}`
+}
+
 const getLastPage = () => {
   // getCurrentPages() 至少有1个元素，所以不再额外判断
   // const lastPage = getCurrentPages().at(-1)
