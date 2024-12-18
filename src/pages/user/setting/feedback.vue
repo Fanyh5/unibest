@@ -8,12 +8,12 @@
 
 <template>
   <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <up-navbar :title="t('feedback')" :placeholder="true" :autoBack="true"></up-navbar>
+    <up-navbar :title="t('feedback.title')" :placeholder="true" :autoBack="true"></up-navbar>
     <view>
       <up-form ref="form" :model="model" :rules="rules" labelPosition="top">
         <up-form-item
           labelWidth="auto"
-          label="反馈类型"
+          :label="t('feedback.type')"
           class="p-2 bg-[#fff] text-[#333] font-bold"
         >
           <up-radio-group v-model="model.type" class="px-2 mt-2 font-medium">
@@ -30,15 +30,15 @@
 
         <up-form-item
           labelWidth="auto"
-          label="相关描述"
+          :label="t('feedback.description')"
           class="p-2 mt-4 bg-[#fff] text-[#333] font-bold"
         >
           <u-textarea
-            label="内容"
+            :label="t('feedback.content')"
             class="font-medium mt-2"
             label-width="20%"
             v-model="model.content"
-            placeholder="请详细描述您遇到的问题或建议"
+            :placeholder="t('feedback.contentPlaceholder')"
             :maxlength="500"
             :height="140"
             count
@@ -49,7 +49,7 @@
 
         <up-form-item
           labelWidth="auto"
-          label="上传凭证（最多2张）"
+          :label="t('feedback.uploadTitle')"
           class="p-2 mt-4 bg-[#fff] text-[#333] font-bold"
         >
           <u-upload
@@ -66,7 +66,7 @@
 
         <up-form-item
           labelWidth="auto"
-          label="联系方式"
+          :label="t('feedback.contact')"
           class="p-2 mt-4 bg-[#fff] text-[#333] font-bold"
         >
           <u-input
@@ -75,14 +75,26 @@
             shape="circle"
             class="font-medium"
             v-model="model.contact"
-            placeholder="请输入手机号或邮箱,方便我们及时反馈"
+            :placeholder="t('feedback.contactPlaceholder')"
             prop="contact"
-            cless="mt-2"
           />
         </up-form-item>
 
         <view class="p-3">
-          <u-button @click="handleSubmit" block :loading="submitting">提交反馈</u-button>
+          <u-button
+            @click="handleSubmit"
+            block
+            :loading="submitting"
+            :disabled="!model.type || !model.content"
+            :customStyle="{
+              background: 'linear-gradient(90deg, #ff6b35, #ff9f28)',
+              color: '#fff',
+              height: '88rpx',
+              borderRadius: '44rpx',
+            }"
+          >
+            {{ submitting ? t('feedback.submitting') : t('feedback.submit') }}
+          </u-button>
         </view>
       </up-form>
     </view>
@@ -95,11 +107,11 @@ import { t } from '@/locale'
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
 const feedbackTypes = [
-  { disabled: false, name: '功能建议' },
-  { disabled: false, name: '界面优化' },
-  { disabled: false, name: '性能问题' },
-  { disabled: false, name: 'BUG反馈' },
-  { disabled: false, name: '其他' },
+  { disabled: false, name: t('feedback.suggestion') },
+  { disabled: false, name: t('feedback.uiOptimization') },
+  { disabled: false, name: t('feedback.performance') },
+  { disabled: false, name: t('feedback.bug') },
+  { disabled: false, name: t('feedback.other') },
 ]
 
 const model = reactive({
@@ -112,15 +124,15 @@ const model = reactive({
 const submitting = ref(false)
 
 const rules = {
-  type: [{ required: true, message: '请选择反馈类型' }],
+  type: [{ required: true, message: t('feedback.typeRequired') }],
   content: [
-    { required: true, message: '请输入反馈内容' },
-    { min: 10, message: '反馈内容至少10个字' },
+    { required: true, message: t('feedback.contentRequired') },
+    { min: 10, message: t('feedback.contentMinLength') },
   ],
   contact: [
     {
       pattern: /^1[3-9]\d{9}$|^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-      message: '请输入正确的手机号或邮箱',
+      message: t('feedback.contactInvalid'),
     },
   ],
 }
@@ -146,16 +158,41 @@ function beforeUpload(file) {
 }
 
 async function handleSubmit() {
+  if (!model.type || !model.content) {
+    uni.showToast({
+      title: t('feedback.requiredFields'),
+      icon: 'none',
+    })
+    return
+  }
+
   try {
     submitting.value = true
     await form.value?.validate()
 
-    // TODO: 调用提交接口
-    // showToast('提交成功', 'success')
+    // 模拟提交接口调用
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    uni.showToast({
+      title: t('feedback.submitSuccess'),
+      icon: 'success',
+    })
+
+    // 重置表单
+    model.type = ''
+    model.content = ''
+    model.contact = ''
+    model.fileList = []
+
+    // 延迟返回上一页
     setTimeout(() => {
       uni.navigateBack()
     }, 1500)
   } catch (error) {
+    uni.showToast({
+      title: error?.message || t('feedback.submitError'),
+      icon: 'none',
+    })
     console.error(error)
   } finally {
     submitting.value = false
