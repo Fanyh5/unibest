@@ -6,149 +6,213 @@
 }
 </route>
 <template>
-  <view class="overflow-hidden" :style="{ marginTop: safeAreaInsets?.top + 'px' }">
-    <UNavbar class="pl-2" :is-back="false" :is-fixed="true" :title="t('message')">
+  <view class="message-page" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
+    <UNavbar class="navbar" :is-back="false" :is-fixed="true" :title="t('message')">
       <template v-slot:right>
-        <view class="px-2">
-          <up-icon @click="showOper = true" name="more-dot-fill"></up-icon>
+        <view class="action-btn" @click="showOper = true">
+          <up-icon name="more-dot-fill" size="44rpx" color="#333"></up-icon>
         </view>
       </template>
     </UNavbar>
+
     <!-- 消息列表 -->
-    <view class="p-2">
+    <view class="message-list" :style="{ paddingBottom: isEdit ? '180rpx' : '24rpx' }">
       <up-swipe-action>
         <up-swipe-action-item
           v-for="(item, index) in messageList"
           :options="options"
           :key="index"
-          style="overflow: inherit"
+          class="message-item-wrapper"
         >
           <view
-            class="relative flex flex-col p-6 mb-5 bg-white rounded-lg shadow-md"
+            class="message-item"
+            :class="{ 'message-item--unread': item.unread }"
             @click="handleMessageClick(item)"
           >
             <!-- 选择框 -->
-            <view class="flex items-center mr-5" v-if="isEdit">
-              <u-checkbox
-                :checked="selectedMessages.includes(item.id)"
-                @click.stop="toggleSelect(item.id)"
+            <view v-if="isEdit" class="checkbox-wrapper" @click.stop="toggleSelect(item.id)">
+              <u-checkbox :checked="selectedMessages.includes(item.id)" class="checkbox" />
+            </view>
+
+            <!-- 消息内容区 -->
+            <view class="message-content" :class="{ 'has-checkbox': isEdit }">
+              <!-- 消息头部 -->
+              <view class="message-header">
+                <text class="message-title">{{ item.title }}</text>
+                <text class="message-time">{{ item.time }}</text>
+              </view>
+
+              <!-- 消息内容 -->
+              <view class="message-body">
+                {{ item.content }}
+              </view>
+
+              <!-- 未读标记 -->
+              <u-badge
+                v-if="item.unread"
+                :absolute="true"
+                :offset="['-16rpx', '16rpx']"
+                type="error"
               />
             </view>
-            <!-- 消息头部 -->
-            <view class="flex items-center justify-between mb-3">
-              <text class="text-[32rpx] font-bold text-[#333]">{{ item.title }}</text>
-              <text class="text-[24rpx] text-[#999]">{{ item.time }}</text>
-            </view>
-            <!-- 消息内容 -->
-            <view class="text-[28rpx] leading-6 text-[#666] line-clamp-2">
-              {{ item.content }}
-            </view>
-            <!-- 未读标记 -->
-            <u-badge
-              v-if="item.unread"
-              :absolute="true"
-              :offset="['-10rpx', '10rpx']"
-              type="error"
-            />
           </view>
         </up-swipe-action-item>
       </up-swipe-action>
+
+      <!-- 空状态 -->
+      <view v-if="!messageList.length" class="empty-state">
+        <up-icon name="info" size="80rpx" color="#999"></up-icon>
+        <text class="empty-text">暂无消息</text>
+      </view>
     </view>
 
     <!-- 底部操作栏 -->
     <view
-      class="fixed bottom-0 left-0 right-0 z-99999 flex items-center justify-between h-[80rpx] px-5 bg-white shadow-lg"
       v-if="isEdit"
-      :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }"
+      class="bottom-bar"
+      :style="{
+        paddingBottom: `calc(${safeAreaInsets?.bottom}px + 24rpx)`,
+      }"
     >
-      <view class="flex items-center gap-2" @click="toggleSelectAll">
-        <u-checkbox :checked="isAllSelected" />
-        <text>全选</text>
+      <view class="select-all" @click="toggleSelectAll">
+        <u-checkbox
+          :checked="isAllSelected"
+          class="checkbox"
+          icon-size="36rpx"
+          active-color="#ff6b6b"
+        />
+        <text class="select-text">全选</text>
       </view>
-      <view class="flex items-center">
-        <view class="mx-2">
-          <up-button
-            type="error"
-            size="mini"
-            @click="deleteSelected"
-            :disabled="!selectedMessages.length"
-          >
-            删除
-          </up-button>
-        </view>
-        <view class="ml-2">
-          <up-button type="info" size="mini" @click="isEdit = false">取消</up-button>
-        </view>
+      <view class="action-buttons">
+        <up-button
+          class="action-btn delete-btn"
+          type="error"
+          size="small"
+          :disabled="!selectedMessages.length"
+          @click="deleteSelected"
+        >
+          <template #icon>
+            <up-icon name="trash-fill" size="32rpx" color="#fff"></up-icon>
+          </template>
+          删除 {{ selectedMessages.length ? `(${selectedMessages.length})` : '' }}
+        </up-button>
+        <up-button
+          class="action-btn cancel-btn"
+          type="info"
+          size="small"
+          plain
+          @click="isEdit = false"
+        >
+          取消
+        </up-button>
       </view>
     </view>
 
     <!-- 底部弹出菜单 -->
-    <up-popup :show="showOper" mode="bottom" :round="10">
+    <up-popup
+      :show="showOper"
+      mode="bottom"
+      :round="20"
+      @close="showOper = false"
+      safe-area-inset-bottom
+      class="action-popup"
+    >
+      <view class="popup-header">
+        <text class="popup-title">消息操作</text>
+        <up-icon
+          name="close"
+          size="40rpx"
+          color="#999"
+          @click="showOper = false"
+          class="close-icon"
+        ></up-icon>
+      </view>
       <up-cell-group>
         <up-cell
           title="批量删除"
+          :title-style="{ fontSize: '32rpx', fontWeight: 500 }"
+          hover-class="cell-hover"
           @click="
             () => {
               showOper = false
               isEdit = true
             }
           "
-        />
-        <up-cell title="全部标记为已读" @click="markAllAsRead" />
-        <up-cell title="取消" @click="showOper = false" />
+        >
+          <template #icon>
+            <up-icon name="trash-fill" size="40rpx" color="#ff6b6b" class="cell-icon"></up-icon>
+          </template>
+        </up-cell>
+        <up-cell
+          title="全部标记已读"
+          :title-style="{ fontSize: '32rpx', fontWeight: 500 }"
+          hover-class="cell-hover"
+          @click="markAllAsRead"
+        >
+          <template #icon>
+            <up-icon
+              name="checkmark-circle-fill"
+              size="40rpx"
+              color="#19be6b"
+              class="cell-icon"
+            ></up-icon>
+          </template>
+        </up-cell>
       </up-cell-group>
     </up-popup>
-
-    <!-- 空状态 -->
-    <up-empty v-if="!messageList.length" mode="message" text="暂无消息" />
   </view>
 </template>
 
 <script setup lang="ts">
-import { t } from '@/locale'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import UNavbar from '@/components/navbar/u-navbar.vue'
+
+const { t } = useI18n()
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
-
-const options = ref<any[]>([
-  {
-    text: '置顶',
-    style: {
-      backgroundColor: '#3c9cff',
-    },
-  },
-  {
-    text: '删除',
-    style: {
-      backgroundColor: '#ff6b35',
-    },
-  },
-])
 
 // 消息列表数据
 const messageList = ref([
   {
     id: 1,
     title: '系统通知',
-    content: '欢迎使用本系统',
-    time: '2024-01-01 12:00',
+    content: '您的订单已发货，请注意查收',
+    time: '2024-12-18 10:00',
     unread: true,
   },
   {
     id: 2,
-    title: '订单提醒',
-    content: '您的订单已发货',
-    time: '2024-01-02 15:30',
+    title: '活动通知',
+    content: '双12优惠活动即将开始，敬请期待',
+    time: '2024-12-17 15:30',
     unread: false,
   },
 ])
 
-// 编辑状态相关
+// 编辑状态
 const isEdit = ref(false)
 const showOper = ref(false)
 const selectedMessages = ref<number[]>([])
-const isAllSelected = computed(() => messageList.value.length === selectedMessages.value.length)
+
+// 计算属性
+const isAllSelected = computed(
+  () => messageList.value.length > 0 && messageList.value.length === selectedMessages.value.length,
+)
+const hasUnread = computed(() => messageList.value.some((msg) => msg.unread))
+
+// 滑动操作配置
+const options = [
+  {
+    text: '标为已读',
+    style: { backgroundColor: '#19be6b' },
+  },
+  {
+    text: '删除',
+    style: { backgroundColor: '#ff6b6b' },
+  },
+]
 
 // 选择消息
 const toggleSelect = (id: number) => {
@@ -165,71 +229,315 @@ const toggleSelectAll = () => {
   if (isAllSelected.value) {
     selectedMessages.value = []
   } else {
-    selectedMessages.value = messageList.value.map((msg) => msg.id)
+    selectedMessages.value = messageList.value.map((item) => item.id)
   }
+}
+
+// 标记消息已读
+const markAsRead = (ids: number[]) => {
+  messageList.value = messageList.value.map((msg) => {
+    if (ids.includes(msg.id)) {
+      return { ...msg, unread: false }
+    }
+    return msg
+  })
 }
 
 // 标记全部已读
-const markAllAsRead = () => {
-  messageList.value = messageList.value.map((msg) => ({ ...msg, unread: false }))
+const markAllAsRead = async () => {
+  if (!hasUnread.value) {
+    uni.showToast({ title: '没有未读消息', icon: 'none' })
+    showOper.value = false
+    return
+  }
+
+  const unreadIds = messageList.value.filter((msg) => msg.unread).map((msg) => msg.id)
+  markAsRead(unreadIds)
+  uni.showToast({ title: '已全部标记为已读', icon: 'success' })
   showOper.value = false
-  uni.showToast({
-    title: '已全部标记为已读',
-    icon: 'success',
-  })
 }
 
-// 处理滑动操作
-const handleSwipeClick = (event: any, message: any) => {
-  if (event === '删除') {
-    uni.showModal({
-      title: '提示',
-      content: '确定要删除该消息吗？',
-      success: (res) => {
-        if (res.confirm) {
-          messageList.value = messageList.value.filter((msg) => msg.id !== message.id)
-          uni.showToast({
-            title: '删除成功',
-            icon: 'success',
-          })
-        }
-      },
-    })
-  }
+// 删除消息
+const deleteMessages = (ids: number[]) => {
+  messageList.value = messageList.value.filter((msg) => !ids.includes(msg.id))
+  selectedMessages.value = selectedMessages.value.filter((id) => !ids.includes(id))
 }
 
 // 删除选中消息
-const deleteSelected = () => {
+const deleteSelected = async () => {
   if (!selectedMessages.value.length) return
-  uni.showModal({
-    title: '提示',
-    content: '确定要删除选中的消息吗？',
-    success: (res) => {
-      if (res.confirm) {
-        messageList.value = messageList.value.filter(
-          (msg) => !selectedMessages.value.includes(msg.id),
-        )
-        selectedMessages.value = []
-        isEdit.value = false
-        uni.showToast({
-          title: '删除成功',
-          icon: 'success',
-        })
-      }
-    },
+
+  const result = await new Promise((resolve) => {
+    uni.showModal({
+      title: '确认删除',
+      content: '是否删除选中的消息？',
+      confirmColor: '#ff6b6b',
+      success: resolve,
+    })
   })
+
+  if (result.confirm) {
+    deleteMessages(selectedMessages.value)
+    uni.showToast({ title: '删除成功', icon: 'success' })
+    if (messageList.value.length === 0) {
+      isEdit.value = false
+    }
+  }
+}
+
+// 处理滑动操作点击
+const handleSwipeClick = async (event: any, message: any) => {
+  const { index } = event
+  if (index === 0) {
+    // 标为已读
+    if (!message.unread) {
+      uni.showToast({ title: '该消息已读', icon: 'none' })
+      return
+    }
+    markAsRead([message.id])
+    uni.showToast({ title: '已标记为已读', icon: 'success' })
+  } else if (index === 1) {
+    // 删除
+    const result = await new Promise((resolve) => {
+      uni.showModal({
+        title: '确认删除',
+        content: '是否删除此消息？',
+        confirmColor: '#ff6b6b',
+        success: resolve,
+      })
+    })
+    if (result.confirm) {
+      deleteMessages([message.id])
+      uni.showToast({ title: '删除成功', icon: 'success' })
+    }
+  }
 }
 
 // 点击消息
-const handleMessageClick = (message) => {
+const handleMessageClick = (message: any) => {
   if (isEdit.value) return
-  message.unread = false
-  uni.navigateTo({
-    url: `/pages/public/richtext?id=${message.id}&title=${encodeURIComponent(message.title)}`,
-  })
+  if (message.unread) {
+    markAsRead([message.id])
+  }
+  // TODO: 跳转到消息详情页
+  uni.showToast({ title: '查看消息详情', icon: 'none' })
 }
 </script>
 
 <style scoped lang="scss">
-// 使用unocss进行样式优化
+.message-page {
+  min-height: 100vh;
+  background-color: #f7f8fa;
+}
+
+// 通用按钮样式
+.action-btn {
+  &:active {
+    background-color: #f5f5f5;
+  }
+}
+
+.navbar {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+
+  .action-btn {
+    padding: 20rpx;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+  }
+}
+
+.message-list {
+  padding: 24rpx;
+  padding-bottom: v-bind('isEdit ? "180rpx" : "24rpx"');
+}
+
+.message-item-wrapper {
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  border-radius: 16rpx;
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.message-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 32rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+
+  &--unread {
+    background: #fff9f9;
+    border-left: 6rpx solid #ff6b6b;
+  }
+}
+
+.checkbox-wrapper {
+  padding: 8rpx 24rpx 8rpx 0;
+
+  .checkbox {
+    transform: scale(0.9);
+  }
+}
+
+.message-content {
+  flex: 1;
+  min-width: 0;
+
+  &.has-checkbox {
+    margin-left: 16rpx;
+  }
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.message-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.message-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.message-body {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #666;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+
+  .empty-text {
+    margin-top: 24rpx;
+    font-size: 28rpx;
+    color: #999;
+  }
+}
+
+.bottom-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 32rpx 0;
+  background: #ffffff;
+  box-shadow: 0 -2rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.select-all {
+  display: flex;
+  gap: 12rpx;
+  align-items: center;
+
+  .checkbox {
+    transform: scale(0.9);
+  }
+
+  .select-text {
+    font-size: 28rpx;
+    color: #666;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+
+  .action-btn {
+    min-width: 160rpx;
+    height: 72rpx;
+    font-size: 28rpx;
+    font-weight: 500;
+    border-radius: 36rpx;
+
+    &.delete-btn {
+      background: linear-gradient(135deg, #ff6b6b, #ff8585);
+      border: none;
+
+      :deep(.u-icon) {
+        margin-right: 8rpx;
+      }
+
+      &:disabled {
+        background: #ccc;
+        opacity: 0.6;
+      }
+    }
+
+    &.cancel-btn {
+      color: #666;
+      border-color: #e4e4e4;
+    }
+  }
+}
+
+.action-popup {
+  :deep(.up-popup__content) {
+    padding-bottom: calc(var(--window-bottom) + 24rpx);
+  }
+
+  .popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32rpx;
+    border-bottom: 1px solid #f5f5f5;
+
+    .popup-title {
+      font-size: 32rpx;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .close-icon {
+      padding: 12rpx;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+
+      &:active {
+        background-color: #f5f5f5;
+      }
+    }
+  }
+
+  :deep(.up-cell) {
+    padding: 32rpx !important;
+
+    .cell-icon {
+      margin-right: 24rpx;
+    }
+  }
+
+  .cell-hover {
+    background-color: #f5f5f5;
+  }
+}
 </style>

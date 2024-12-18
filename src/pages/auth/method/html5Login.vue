@@ -8,9 +8,9 @@
       </view>
     </view>
     <!-- 手机号登录 -->
-    <div v-show="!enableUserPwdBox">
+    <view v-show="!enableUserPwdBox">
       <!-- 输入手机号 -->
-      <div v-show="current == 0">
+      <view v-show="current == 0">
         <view class="content">
           <input
             class="u-border-bottom"
@@ -25,10 +25,10 @@
             <view class="issue">遇到问题</view>
           </view>
         </view>
-      </div>
+      </view>
 
       <!-- 输入验证码 -->
-      <div v-show="current == 1">
+      <view v-show="current == 1">
         <view class="key-input">
           <up-message-input
             :focus="true"
@@ -54,11 +54,11 @@
             </up-button>
           </view>
         </view>
-      </div>
-    </div>
+      </view>
+    </view>
 
     <!-- 帐号密码登录 -->
-    <div v-show="enableUserPwdBox">
+    <view v-show="enableUserPwdBox">
       <view class="content">
         <input class="u-border-bottom" v-model="userLogin.username" placeholder="请输入用户名" />
         <input
@@ -73,10 +73,10 @@
           <view class="issue">遇到问题</view>
         </view>
       </view>
-    </div>
+    </view>
 
     <!-- 隐私协议 -->
-    <div class="flex mt-4 px-2" v-show="current != 1">
+    <view class="flex mt-4 px-2" v-show="current != 1">
       <checkbox-group @change="checkboxChange">
         <checkbox :checked="enablePrivacy" style="transform: scale(0.7)" />
         <text class="privacy-tips">
@@ -90,20 +90,21 @@
           并授权使用您的账号信息（如昵称、头像、收获地址）以便您统一管理
         </text>
       </checkbox-group>
-    </div>
+    </view>
 
     <!-- 切换登录方式 -->
-    <div
+    <view
       v-if="current != 1"
       class="user-password-tips"
       @click="enableUserPwdBox = !enableUserPwdBox"
     >
       {{ !enableUserPwdBox ? '帐号密码' : '手机号' }}登录
-    </div>
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
+import { ref, computed, reactive, watch } from 'vue'
 import { sendMobileApi, userLoginApi } from '@/service/index/auth'
 import { useUserStore } from '@/store'
 import { currRoute } from '@/utils'
@@ -111,22 +112,22 @@ import { currRoute } from '@/utils'
 const userStore = useUserStore()
 
 // 状态管理
-const flage = ref(false)
-const codeFlag = ref(true)
-const tips = ref('')
+const loading = ref(false)
+const mobile = ref('')
+const code = ref('')
+const codeError = ref(false)
 const enableUserPwdBox = ref(false)
 const current = ref(0)
 const seconds = ref(60)
 const enablePrivacy = ref(false)
-const mobile = ref('')
-const code = ref('')
-const codeError = ref(false)
 const uCodeRef = ref(null)
 const reacquire = ref(false)
-// 用户数据
+const tips = ref('获取验证码')
+
+// 用户登录信息
 const userLogin = reactive({
-  username: 'test',
-  password: '123qwe',
+  username: '',
+  password: '',
 })
 
 // 登录标题配置
@@ -141,142 +142,190 @@ const loginTitleWay = reactive([
   },
 ])
 
+// 手机号验证
+const isValidPhone = computed(() => {
+  return /^1[3-9]\d{9}$/.test(mobile.value)
+})
+
+// 获取验证码按钮样式
+const inputStyle = computed(() => {
+  return {
+    color: mobile.value ? '#fff' : '#999',
+    backgroundColor: mobile.value ? '#f9ae3d' : 'rgb(253, 243, 208)',
+  }
+})
+
 /** 获取验证码 */
 const fetchCode = async () => {
   if (!enablePrivacy.value) {
-    uni.showToast({ title: '请同意用户隐私', duration: 2000, icon: 'none' })
+    uni.showToast({
+      title: '请同意用户隐私协议',
+      icon: 'none',
+    })
     return
   }
 
-  if (!/^1[3-9]\d{9}$/.test(mobile.value)) {
-    uni.showToast({ title: '请填写正确手机号', duration: 2000, icon: 'none' })
+  if (!isValidPhone.value) {
+    uni.showToast({
+      title: '请填写正确手机号',
+      icon: 'none',
+    })
     return
   }
 
-  current.value = 1
-
-  if (tips.value === '重新获取验证码' && codeFlag.value) {
-    uni.showLoading({ title: '加载中' })
-    try {
-      tips.value = '已发送'
-    } finally {
-      uni.hideLoading()
+  loading.value = true
+  try {
+    const res = await sendMobileApi(mobile.value)
+    if (res.code === 0) {
+      current.value = 1
+      uCodeRef.value?.start()
+      uni.showToast({
+        title: '验证码已发送',
+        icon: 'success',
+      })
+    } else {
+      uni.showToast({
+        title: res.message || '发送失败',
+        icon: 'none',
+      })
     }
+  } catch (error) {
+    uni.showToast({
+      title: '网络异常，请重试',
+      icon: 'none',
+    })
+  } finally {
+    loading.value = false
   }
 }
 
-const codeChange = (text) => {
+// 验证码相关处理
+const codeChange = (text: string) => {
   tips.value = text
 }
 
-const getCode = () => {
-  if (uCodeRef.value.canGetCode) {
-    // 模拟向后端请求验证码
-    uni.showLoading({
-      title: '正在获取验证码',
+const getCode = async () => {
+  if (!uCodeRef.value?.canGetCode) {
+    uni.showToast({
+      title: '请稍后再试',
+      icon: 'none',
     })
-    setTimeout(() => {
-      uni.hideLoading()
-      // 这里此提示会被start()方法中的提示覆盖
+    return
+  }
+
+  loading.value = true
+  try {
+    const res = await sendMobileApi(mobile.value)
+    if (res.code === 0) {
+      uCodeRef.value.start()
       uni.showToast({
         title: '验证码已发送',
-        icon: 'none',
+        icon: 'success',
       })
-      // 通知验证码组件内部开始倒计时
-      uCodeRef.value.start()
-    }, 1000)
-  } else {
-    uni.showToast({
-      title: '倒计时结束后再发送',
-      icon: 'none',
-    })
-  }
-}
-
-// change事件侦听
-const change = (value: string) => {
-  // console.log('change', value);
-}
-
-// 输入完验证码最后一位执行
-const finish = (value: string) => {
-  // console.log('finish', value);
-}
-
-/** 密码登录 */
-function userLoginFun() {
-  if (!enablePrivacy.value) {
-    uni.showToast({
-      title: '请同意用户隐私',
-      duration: 2000,
-      icon: 'none',
-    })
-    return false
-  }
-
-  if (!userLogin.username) {
-    uni.showToast({
-      title: '请填写用户名',
-      duration: 2000,
-      icon: 'none',
-    })
-    return false
-  }
-
-  if (!userLogin.password) {
-    uni.showToast({
-      title: '请填写密码',
-      duration: 2000,
-      icon: 'none',
-    })
-    return false
-  }
-
-  const params = JSON.parse(JSON.stringify(userLogin))
-  userLoginApi(params, 'H5').then((res: IResData<any>) => {
-    if (res.code === 0) {
-      userStore.setUserInfo({ userInfo: res.data.userInfo, token: res.data.token })
-      uni.switchTab({ url: '/' })
     } else {
       uni.showToast({
-        title: res.message,
-        duration: 2000,
+        title: res.message || '发送失败',
         icon: 'none',
       })
     }
-  })
+  } catch (error) {
+    uni.showToast({
+      title: '网络异常，请重试',
+      icon: 'none',
+    })
+  } finally {
+    loading.value = false
+  }
+}
+
+// 验证码输入处理
+const change = (value: string) => {
+  code.value = value
+  if (codeError.value) codeError.value = false
+}
+
+// 验证码完成输入
+const finish = async (value: string) => {
+  if (value.length !== 6) return
+
+  loading.value = true
+  try {
+    const res = await userLoginApi({ mobile: mobile.value, code: value }, 'H5')
+    if (res.code === 0) {
+      userStore.setUserInfo({
+        userInfo: res.data.userInfo,
+        token: res.data.token,
+      })
+      uni.switchTab({ url: '/' })
+    } else {
+      codeError.value = true
+      uni.showToast({
+        title: res.message || '验证失败',
+        icon: 'none',
+      })
+    }
+  } catch (error) {
+    uni.showToast({
+      title: '网络异常，请重试',
+      icon: 'none',
+    })
+  } finally {
+    loading.value = false
+  }
+}
+
+/** 密码登录 */
+const userLoginFun = async () => {
+  if (!enablePrivacy.value) {
+    uni.showToast({
+      title: '请同意用户隐私协议',
+      icon: 'none',
+    })
+    return
+  }
+
+  if (!userLogin.username || !userLogin.password) {
+    uni.showToast({
+      title: '请填写完整的登录信息',
+      icon: 'none',
+    })
+    return
+  }
+
+  loading.value = true
+  try {
+    const res = await userLoginApi(userLogin, 'H5')
+    if (res.code === 0) {
+      userStore.setUserInfo({
+        userInfo: res.data.userInfo,
+        token: res.data.token,
+      })
+      uni.switchTab({ url: '/' })
+    } else {
+      uni.showToast({
+        title: res.message || '登录失败',
+        icon: 'none',
+      })
+    }
+  } catch (error) {
+    uni.showToast({
+      title: '网络异常，请重试',
+      icon: 'none',
+    })
+  } finally {
+    loading.value = false
+  }
 }
 
 /** 跳转隐私协议 */
-function navigateToPrivacy(val: string) {
+const navigateToPrivacy = (val: string) => {
   uni.navigateTo({
     url: '/pages/mine/help/tips?type=' + val,
   })
 }
-const inputStyle = computed(() => {
-  const style: any = {}
-  if (mobile.value) {
-    style.color = '#fff'
-    style.backgroundColor = '#f9ae3d'
-  }
-  return style
-})
-
-// 监听按钮状态
-watch(
-  () => flage.value,
-  async (val) => {
-    if (val) {
-      if (enableUserPwdBox.value) {
-        return
-      }
-      const res = await sendMobileApi(mobile.value)
-    }
-  },
-)
 
 // 隐私协议勾选
-function checkboxChange(e) {
+const checkboxChange = (e: any) => {
   enablePrivacy.value = e.detail.value.length > 0
 }
 </script>
