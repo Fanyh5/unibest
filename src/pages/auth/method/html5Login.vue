@@ -1,35 +1,44 @@
 <template>
-  <view>
-    <view class="mt-20">
-      <view class="text-left text-3xl font-medium">{{ loginTitleWay[current].title }}</view>
-      <view :class="current == 1 ? 'desc-light' : 'desc'" class="mb-24">
+  <view class="login-container">
+    <view class="header">
+      <view class="title">{{ loginTitleWay[current].title }}</view>
+      <view :class="current == 1 ? 'subtitle-light' : 'subtitle'" class="mb-24">
         {{ loginTitleWay[current].desc }}
         <span v-if="current == 1">{{ mobile || 'secrecyMobile' }}</span>
       </view>
     </view>
+
     <!-- 手机号登录 -->
-    <view v-show="!enableUserPwdBox">
+    <view v-show="!enableUserPwdBox" class="login-form">
       <!-- 输入手机号 -->
       <view v-show="current == 0">
-        <view class="content">
+        <view class="form-content">
           <input
-            class="u-border-bottom"
+            ref="mobileInput"
+            class="input-field"
             type="number"
             v-model="mobile"
             placeholder="请输入手机号 (11位)"
           />
           <view class="tips">未注册的手机号验证后自动创建账号</view>
-          <button @tap="fetchCode" :style="[inputStyle]" class="getCaptcha">获取短信验证码</button>
-          <view class="alternative">
+          <button
+            @tap="debouncedFetchCode"
+            :class="['submit-btn', mobile ? 'btn-active' : '']"
+            :disabled="btnLoading"
+          >
+            <text v-if="btnLoading">加载中...</text>
+            <text v-else>获取短信验证码</text>
+          </button>
+          <view class="help-section">
             <view></view>
-            <view class="issue">遇到问题</view>
+            <view class="help-text">遇到问题</view>
           </view>
         </view>
       </view>
 
       <!-- 输入验证码 -->
       <view v-show="current == 1">
-        <view class="key-input">
+        <view class="verification-section">
           <up-message-input
             :focus="true"
             :value="code"
@@ -37,10 +46,11 @@
             @finish="finish"
             mode="bottomLine"
             :maxlength="6"
+            class="code-input"
           ></up-message-input>
-          <text :class="{ error: codeError }">验证码错误，请重新输入</text>
+          <text :class="['error-text', { visible: codeError }]">验证码错误，请重新输入</text>
 
-          <view class="px-6">
+          <view class="code-actions">
             <up-toast ref="uToastRef"></up-toast>
             <up-code
               :seconds="seconds"
@@ -49,7 +59,7 @@
               ref="uCodeRef"
               @change="codeChange"
             ></up-code>
-            <up-button :disabled="reacquire" type="primary" @tap="getCode" class="mt-4">
+            <up-button :disabled="reacquire" type="primary" @tap="getCode" class="resend-btn">
               {{ tips }}
             </up-button>
           </view>
@@ -58,56 +68,46 @@
     </view>
 
     <!-- 帐号密码登录 -->
-    <view v-show="enableUserPwdBox">
-      <view class="content">
-        <input class="u-border-bottom" v-model="userLogin.username" placeholder="请输入用户名" />
+    <view v-show="enableUserPwdBox" class="login-form">
+      <view class="form-content">
+        <input class="input-field" v-model="userLogin.username" placeholder="请输入用户名" />
         <input
-          class="u-border-bottom mt-5"
+          class="input-field mt-3"
           :showPassword="true"
           v-model="userLogin.password"
           placeholder="请输入密码"
         />
-        <button @tap="userLoginFun" class="getCaptcha">登录</button>
-        <view class="alternative">
+        <button @tap="userLoginFun" class="submit-btn btn-active">登录</button>
+        <view class="help-section">
           <view></view>
-          <view class="issue">遇到问题</view>
+          <view class="help-text">遇到问题</view>
         </view>
       </view>
     </view>
 
     <!-- 隐私协议 -->
-    <view class="flex mt-4 px-2" v-show="current != 1">
+    <view class="privacy-section" v-show="current != 1">
       <checkbox-group @change="checkboxChange">
-        <checkbox :checked="enablePrivacy" style="transform: scale(0.7)" />
-        <text class="privacy-tips">
+        <checkbox :checked="enablePrivacy" class="privacy-checkbox" />
+        <text class="privacy-content">
           登录即代表您已同意
-          <text @click="navigateToPrivacy('PRIVACY_POLICY')" style="color: #ff6b35">
-            《隐私协议》
-          </text>
-          <text @click="navigateToPrivacy('USER_AGREEMENT')" style="color: #ff6b35">
-            《用户协议》
-          </text>
+          <text @click="navigateToPrivacy('PRIVACY_POLICY')" class="link">《隐私协议》</text>
+          <text @click="navigateToPrivacy('USER_AGREEMENT')" class="link">《用户协议》</text>
           并授权使用您的账号信息（如昵称、头像、收获地址）以便您统一管理
         </text>
       </checkbox-group>
     </view>
 
     <!-- 切换登录方式 -->
-    <view
-      v-if="current != 1"
-      class="user-password-tips"
-      @click="enableUserPwdBox = !enableUserPwdBox"
-    >
+    <view v-if="current != 1" class="switch-login" @click="enableUserPwdBox = !enableUserPwdBox">
       {{ !enableUserPwdBox ? '帐号密码' : '手机号' }}登录
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, watch } from 'vue'
-import { sendMobileApi, userLoginApi } from '@/service/index/auth'
 import { useUserStore } from '@/store'
-import { currRoute } from '@/utils'
+import { debounce } from '@/utils'
 
 const userStore = useUserStore()
 
@@ -123,6 +123,7 @@ const enablePrivacy = ref(false)
 const uCodeRef = ref(null)
 const reacquire = ref(false)
 const tips = ref('获取验证码')
+const btnLoading = ref(false)
 
 // 用户登录信息
 const userLogin = reactive({
@@ -155,27 +156,36 @@ const inputStyle = computed(() => {
   }
 })
 
+// 模拟后端接口返回数据
+const mockApiResponse = (data = {}, delay = 1000) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        code: 0,
+        message: '操作成功',
+        data: {
+          userInfo: {
+            id: 1,
+            username: 'test',
+            mobile: '13800138000',
+            avatar: '',
+          },
+          token: 'mock_token_' + Date.now(),
+          ...data,
+        },
+      })
+    }, delay)
+  })
+}
+
 /** 获取验证码 */
 const fetchCode = async () => {
-  if (!enablePrivacy.value) {
-    uni.showToast({
-      title: '请同意用户隐私协议',
-      icon: 'none',
-    })
-    return
-  }
-
-  if (!isValidPhone.value) {
-    uni.showToast({
-      title: '请填写正确手机号',
-      icon: 'none',
-    })
-    return
-  }
+  if (!validateForm()) return
 
   loading.value = true
+  btnLoading.value = true
   try {
-    const res = await sendMobileApi(mobile.value)
+    const res: any = await mockApiResponse()
     if (res.code === 0) {
       current.value = 1
       uCodeRef.value?.start()
@@ -184,18 +194,13 @@ const fetchCode = async () => {
         icon: 'success',
       })
     } else {
-      uni.showToast({
-        title: res.message || '发送失败',
-        icon: 'none',
-      })
+      handleError(res)
     }
   } catch (error) {
-    uni.showToast({
-      title: '网络异常，请重试',
-      icon: 'none',
-    })
+    handleError(error)
   } finally {
     loading.value = false
+    btnLoading.value = false
   }
 }
 
@@ -206,16 +211,13 @@ const codeChange = (text: string) => {
 
 const getCode = async () => {
   if (!uCodeRef.value?.canGetCode) {
-    uni.showToast({
-      title: '请稍后再试',
-      icon: 'none',
-    })
+    handleError(null, '请稍后再试')
     return
   }
 
   loading.value = true
   try {
-    const res = await sendMobileApi(mobile.value)
+    const res: any = await mockApiResponse()
     if (res.code === 0) {
       uCodeRef.value.start()
       uni.showToast({
@@ -223,16 +225,10 @@ const getCode = async () => {
         icon: 'success',
       })
     } else {
-      uni.showToast({
-        title: res.message || '发送失败',
-        icon: 'none',
-      })
+      handleError(res)
     }
   } catch (error) {
-    uni.showToast({
-      title: '网络异常，请重试',
-      icon: 'none',
-    })
+    handleError(error)
   } finally {
     loading.value = false
   }
@@ -250,7 +246,7 @@ const finish = async (value: string) => {
 
   loading.value = true
   try {
-    const res = await userLoginApi({ mobile: mobile.value, code: value }, 'H5')
+    const res: any = await mockApiResponse()
     if (res.code === 0) {
       userStore.setUserInfo({
         userInfo: res.data.userInfo,
@@ -259,16 +255,10 @@ const finish = async (value: string) => {
       uni.switchTab({ url: '/' })
     } else {
       codeError.value = true
-      uni.showToast({
-        title: res.message || '验证失败',
-        icon: 'none',
-      })
+      handleError(res)
     }
   } catch (error) {
-    uni.showToast({
-      title: '网络异常，请重试',
-      icon: 'none',
-    })
+    handleError(error)
   } finally {
     loading.value = false
   }
@@ -276,25 +266,11 @@ const finish = async (value: string) => {
 
 /** 密码登录 */
 const userLoginFun = async () => {
-  if (!enablePrivacy.value) {
-    uni.showToast({
-      title: '请同意用户隐私协议',
-      icon: 'none',
-    })
-    return
-  }
-
-  if (!userLogin.username || !userLogin.password) {
-    uni.showToast({
-      title: '请填写完整的登录信息',
-      icon: 'none',
-    })
-    return
-  }
+  if (!validateForm()) return
 
   loading.value = true
   try {
-    const res = await userLoginApi(userLogin, 'H5')
+    const res: any = await mockApiResponse()
     if (res.code === 0) {
       userStore.setUserInfo({
         userInfo: res.data.userInfo,
@@ -302,16 +278,10 @@ const userLoginFun = async () => {
       })
       uni.switchTab({ url: '/' })
     } else {
-      uni.showToast({
-        title: res.message || '登录失败',
-        icon: 'none',
-      })
+      handleError(res)
     }
   } catch (error) {
-    uni.showToast({
-      title: '网络异常，请重试',
-      icon: 'none',
-    })
+    handleError(error)
   } finally {
     loading.value = false
   }
@@ -328,110 +298,192 @@ const navigateToPrivacy = (val: string) => {
 const checkboxChange = (e: any) => {
   enablePrivacy.value = e.detail.value.length > 0
 }
+
+// 统一错误处理
+const handleError = (error: any, customMessage?: string) => {
+  uni.showToast({
+    title: customMessage || error?.message || '网络异常，请重试',
+    icon: 'none',
+  })
+}
+
+// 统一表单验证
+const validateForm = () => {
+  if (!enablePrivacy.value) {
+    handleError(null, '请同意用户隐私协议')
+    return false
+  }
+
+  if (enableUserPwdBox.value) {
+    if (!userLogin.username || !userLogin.password) {
+      handleError(null, '请填写完整的登录信息')
+      return false
+    }
+  } else {
+    if (!isValidPhone.value) {
+      handleError(null, '请填写正确手机号')
+      return false
+    }
+  }
+  return true
+}
+
+// 防抖处理
+const debouncedFetchCode = debounce(async () => {
+  await fetchCode()
+}, 300)
+
+// 输入框自动聚焦
+const mobileInput = ref(null)
+
+onMounted(() => {
+  // 自动聚焦手机号输入框
+  nextTick(() => {
+    mobileInput.value?.focus()
+  })
+})
 </script>
 
 <style scoped lang="scss">
-.content {
-  width: 600rpx;
-  margin: 20rpx auto 0;
-  input {
-    padding-bottom: 6rpx;
-    margin-bottom: 10rpx;
-    text-align: left;
-  }
-  .tips {
-    margin-top: 8rpx;
-    margin-bottom: 60rpx;
-    font-size: 12px;
-    color: $u-info;
-  }
-  .getCaptcha {
-    padding: 12rpx 0;
-    font-size: 30rpx;
-    color: $u-tips-color;
-    background-color: rgb(253, 243, 208);
-    border: none;
-
-    &::after {
-      border: none;
-    }
-  }
-  .alternative {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30rpx;
-    color: $u-tips-color;
-  }
+.login-container {
+  padding: 30rpx;
+  background: #fff;
 }
 
-.title {
-  padding-top: calc(104rpx);
-  font-size: 56rpx;
-  font-weight: 500;
-  line-height: 1;
-  color: #333;
-}
-
-.desc,
-.desc-light {
-  margin-top: 40rpx;
-  font-size: 32rpx;
-  line-height: 32rpx;
-}
-
-.desc {
-  color: #333;
-}
-
-.desc-light {
-  color: #999;
-
-  > span {
-    margin-left: 8rpx;
+.header {
+  margin-bottom: 60rpx;
+  .title {
+    margin-bottom: 20rpx;
+    font-size: 48rpx;
+    font-weight: 600;
     color: #333;
   }
+  .subtitle,
+  .subtitle-light {
+    font-size: 28rpx;
+    line-height: 1.5;
+  }
+
+  .subtitle {
+    color: #333;
+  }
+
+  .subtitle-light {
+    color: #999;
+
+    span {
+      margin-left: 8rpx;
+      color: #333;
+    }
+  }
 }
 
-.mobile {
-  margin-top: 80rpx;
+.login-form {
+  .form-content {
+    padding: 0 40rpx;
+
+    .input-field {
+      width: 100%;
+      height: 90rpx;
+      padding: 0 20rpx;
+      font-size: 28rpx;
+      border-bottom: 2rpx solid #eee;
+      transition: all 0.3s;
+
+      &:focus {
+        border-color: #f9ae3d;
+      }
+    }
+
+    .tips {
+      margin: 20rpx 0 40rpx;
+      font-size: 24rpx;
+      color: #999;
+    }
+  }
 }
 
-.privacy-tips {
+.submit-btn {
   width: 100%;
-  font-size: 24rpx;
-  line-height: 40rpx;
-  word-break: break-all;
-  white-space: normal;
-}
-
-.fetch-btn {
-  width: 370rpx;
-  height: 80rpx;
-  margin: 71rpx auto 0;
-  font-size: 28rpx;
-  line-height: 80rpx;
+  height: 88rpx;
+  font-size: 32rpx;
   color: #999;
-  text-align: center;
-  background: #f2f2f2;
-  border-radius: 100rpx;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 44rpx;
+  transition: all 0.3s;
+
+  &.btn-active {
+    color: #fff;
+    background: linear-gradient(to right, #f9ae3d, #ff6b35);
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
 }
 
-.user-password-tips {
-  margin: 20px 0;
-  color: #ff3c2a;
-  text-align: center;
+.help-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30rpx;
+
+  .help-text {
+    font-size: 26rpx;
+    color: #666;
+  }
 }
 
-.key-input {
-  padding: 10rpx 0;
-  text {
+.verification-section {
+  padding: 40rpx;
+
+  .code-input {
+    margin-bottom: 30rpx;
+  }
+
+  .error-text {
     display: none;
+    font-size: 26rpx;
+    color: #ff4d4f;
+
+    &.visible {
+      display: block;
+    }
   }
-  .error {
-    display: block;
-    margin: 20rpx 0;
-    font-size: 30rpx;
-    color: red;
+
+  .code-actions {
+    margin-top: 40rpx;
   }
+
+  .resend-btn {
+    width: 100%;
+    margin-top: 20rpx;
+  }
+}
+
+.privacy-section {
+  padding: 30rpx 40rpx;
+
+  .privacy-checkbox {
+    transform: scale(0.7);
+  }
+
+  .privacy-content {
+    font-size: 24rpx;
+    line-height: 1.6;
+    color: #666;
+
+    .link {
+      color: #f9ae3d;
+    }
+  }
+}
+
+.switch-login {
+  padding: 20rpx;
+  margin-top: 40rpx;
+  font-size: 28rpx;
+  color: #f9ae3d;
+  text-align: center;
 }
 </style>

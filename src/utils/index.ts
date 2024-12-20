@@ -32,6 +32,24 @@ export const getIsTabbar = () => {
 }
 
 /**
+ * 防抖函数
+ * @param fn 需要防抖的函数
+ * @param delay 延迟时间，默认300ms
+ * @returns 防抖后的函数
+ */
+export const debounce = <T extends (...args: any[]) => any>(fn: T, delay = 300) => {
+  let timer: ReturnType<typeof setTimeout> | null = null
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
+
+/**
  * 获取当前页面路由的 path 路径和 redirectPath 路径
  * path 如 ‘/pages/login/index’
  * redirectPath 如 ‘/pages/demo/base/route-interceptor’
