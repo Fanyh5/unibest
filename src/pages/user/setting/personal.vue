@@ -8,120 +8,84 @@
 
 <template>
   <view class="personal-page" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
-    <up-navbar :title="t('personal')" :placeholder="true" :autoBack="true" class="navbar" />
-
+    <up-navbar :title="t('personal')" :placeholder="true" :auto-back="true" class="navbar" />
     <view class="personal-content">
-      <view class="profile-header">
-        <text class="profile-title">个人信息</text>
-        <text class="profile-subtitle">完善个人信息让其他用户更好地了解你</text>
+      <!-- 头像部分 -->
+      <view class="avatar-section">
+        <view class="avatar-container" @click="handleEditAvatar">
+          <u-avatar
+            :src="userInfo.avatar || defaultAvatar"
+            :size="80"
+            shape="circle"
+            class="avatar"
+          />
+          <view class="avatar-edit-icon">
+            <u-icon name="camera-fill" color="#fff" :size="20" />
+          </view>
+        </view>
+        <text class="avatar-username">{{ userInfo.username }}</text>
+        <text class="avatar-tip">点击更换头像</text>
       </view>
 
-      <up-form
-        :model="userInfo"
-        ref="formRef"
-        labelPosition="left"
-        :rules="formRules"
-        class="up-form"
-      >
-        <u-form-item
-          label="头像"
-          @click="handleEditAvatar"
-          class="u-form-item avatar-item"
-          hoverClass="item-hover"
+      <!-- 表单部分 -->
+      <view class="form-section">
+        <up-form
+          :model="userInfo"
+          ref="formRef"
+          label-position="left"
+          :rules="formRules"
+          class="up-form"
         >
-          <view class="avatar-wrapper">
-            <u-avatar
-              :src="userInfo.avatar || defaultAvatar"
-              size="50"
-              shape="circle"
-              class="avatar"
-            />
-            <view class="avatar-right">
-              <text class="avatar-tip">点击更换头像</text>
-              <text class="avatar-desc">支持 jpg、png 格式大小 5M 以内的图片</text>
+          <u-form-item
+            :border-bottom="true"
+            label="昵称"
+            @click="handleEditNickname"
+            class="form-item"
+            prop="nickname"
+            hover-class="item-hover"
+          >
+            <view class="input-wrapper">
+              <u-input
+                v-model="userInfo.nickname"
+                placeholder="请输入昵称"
+                :maxlength="20"
+                border="bottom"
+                @blur="handleNicknameBlur"
+                class="form-input"
+              />
+              <u-icon name="arrow-right" color="var(--up-text-color-secondary)" :size="16" />
             </view>
-            <u-icon name="arrow-right" color="var(--up-text-color-secondary)" size="16" />
-          </view>
-        </u-form-item>
+          </u-form-item>
 
-        <u-form-item borderBottom label="用户名" class="u-form-item">
-          <view class="input-wrapper">
-            <text class="username-text">{{ userInfo.username }}</text>
-            <text class="input-desc">用户名不可修改</text>
-          </view>
-        </u-form-item>
+          <u-form-item
+            :border-bottom="true"
+            label="性别"
+            @click="handleShowGenderPicker"
+            class="form-item"
+            prop="gender"
+            hover-class="item-hover"
+          >
+            <view class="input-wrapper">
+              <text :class="['gender-text', !userInfo.gender && 'placeholder']">
+                {{ genderLabel }}
+              </text>
+              <u-icon name="arrow-right" color="var(--up-text-color-secondary)" :size="16" />
+            </view>
+          </u-form-item>
+        </up-form>
+      </view>
 
-        <u-form-item
-          borderBottom
-          label="昵称"
-          @click="handleEditNickname"
-          class="u-form-item"
-          prop="nickname"
-          hoverClass="item-hover"
-        >
-          <view class="input-wrapper">
-            <u-input
-              v-model="userInfo.nickname"
-              placeholder="请输入昵称"
-              :maxlength="20"
-              @blur="handleNicknameBlur"
-              class="form-input"
-            />
-            <u-icon name="arrow-right" color="var(--up-text-color-secondary)" size="16" />
-          </view>
-        </u-form-item>
-
-        <u-form-item
-          borderBottom
-          label="性别"
-          @click="handleShowGenderPicker"
-          class="u-form-item"
-          prop="gender"
-          hoverClass="item-hover"
-        >
-          <view class="input-wrapper">
-            <text :class="['gender-text', !userInfo.gender && 'placeholder']">
-              {{ genderLabel }}
-            </text>
-            <u-icon name="arrow-right" color="var(--up-text-color-secondary)" size="16" />
-          </view>
-        </u-form-item>
-      </up-form>
-
+      <!-- 保存按钮 -->
       <view class="action-buttons">
         <u-button type="primary" @click="handleSave" :loading="isSaving" class="save-button">
           {{ isSaving ? '保存中...' : '保存修改' }}
         </u-button>
       </view>
     </view>
-
-    <u-popup
-      v-model="showGenderPicker"
-      mode="bottom"
-      safeAreaInsetBottom
-      round="16"
-      class="gender-popup"
-    >
-      <view class="picker-header">
-        <text class="picker-title">选择性别</text>
-      </view>
-      <u-picker
-        :columns="[genderOptions]"
-        @confirm="handleGenderConfirm"
-        @cancel="showGenderPicker = false"
-        :defaultIndex="[
-          userInfo.gender ? genderOptions.findIndex((item) => item.value === userInfo.gender) : 0,
-        ]"
-        class="gender-picker"
-      />
-    </u-popup>
-
-    <u-toast ref="uToast" />
   </view>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
 import { t } from '@/locale'
 import type { FormInstance } from '@/types/form'
 import { useUserStore } from '@/store/user'
@@ -288,7 +252,6 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .personal-page {
   min-height: 100vh;
-  color: #333;
   background-color: #f7f8fa;
 }
 
@@ -299,46 +262,94 @@ onMounted(async () => {
 }
 
 .personal-content {
-  padding: 20px 16px;
+  max-width: 800px;
+  padding: 24px 16px;
+  margin: 0 auto;
 }
 
-.profile-header {
-  padding: 0 4px;
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0;
   margin-bottom: 24px;
+  background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.profile-title {
-  display: block;
+.avatar {
+  border: 4px solid #fff;
+  box-shadow: 0 4px 15px rgba(64, 128, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.avatar-edit-icon {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #4080ff 0%, #2b62da 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(64, 128, 255, 0.25);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(5px);
+}
+
+.avatar-container {
+  position: relative;
+  margin-bottom: 16px;
+  cursor: pointer;
+
+  &:hover {
+    .avatar {
+      box-shadow: 0 8px 25px rgba(64, 128, 255, 0.25);
+      transform: scale(1.05);
+    }
+
+    .avatar-edit-icon {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.avatar-username {
   margin-bottom: 8px;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: #1a1a1a;
-  letter-spacing: -0.5px;
 }
 
-.profile-subtitle {
+.avatar-tip {
   font-size: 14px;
   color: #666;
 }
 
-.up-form {
+.form-section {
   margin-bottom: 24px;
+}
+
+.up-form {
   overflow: hidden;
-  background-color: #fff;
-  border: 1px solid rgba(60, 60, 67, 0.1);
+  background: #fff;
   border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 }
 
-.u-form-item {
-  position: relative;
-  padding: 16px;
-  transition: all 0.3s ease;
+.form-item {
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
 
   &:not(:last-child) {
     border-bottom: 1px solid rgba(60, 60, 67, 0.1);
@@ -349,46 +360,6 @@ onMounted(async () => {
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-.avatar-item {
-  padding: 20px 16px;
-}
-
-.avatar-wrapper {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  width: 100%;
-}
-
-.avatar {
-  flex-shrink: 0;
-  border: 2px solid #4080ff;
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: #2b62da;
-    box-shadow: 0 2px 8px rgba(64, 128, 255, 0.2);
-    transform: scale(1.05);
-  }
-}
-
-.avatar-right {
-  flex: 1;
-  min-width: 0;
-}
-
-.avatar-tip {
-  display: block;
-  margin-bottom: 4px;
-  font-weight: 500;
-  color: #1a1a1a;
-}
-
-.avatar-desc {
-  font-size: 12px;
-  color: #999;
-}
-
 .input-wrapper {
   display: flex;
   gap: 12px;
@@ -396,35 +367,19 @@ onMounted(async () => {
   width: 100%;
 }
 
-.username-text {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  font-size: 14px;
-  color: #666;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.input-desc {
-  font-size: 12px;
-  color: #999;
-}
-
 .form-input {
   flex: 1;
-  min-width: 0;
 
   :deep(input) {
-    height: 24px;
-    font-size: 14px;
+    height: 28px;
+    font-size: 15px;
     color: #333;
   }
 }
 
 .gender-text {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   color: #333;
 
   &.placeholder {
@@ -438,108 +393,67 @@ onMounted(async () => {
 
 .save-button {
   width: 100%;
-  height: 48px !important;
+  height: 50px !important;
   font-size: 16px !important;
-  font-weight: 500;
-  color: #fff !important;
+  font-weight: 600;
   background: linear-gradient(135deg, #4080ff 0%, #2b62da 100%) !important;
   border: none !important;
-  border-radius: 12px !important;
-  box-shadow: 0 4px 12px rgba(64, 128, 255, 0.2) !important;
-  transition: all 0.3s ease !important;
+  border-radius: 25px !important;
+  box-shadow: 0 6px 20px rgba(64, 128, 255, 0.25) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 
   &:active {
-    box-shadow: 0 2px 8px rgba(64, 128, 255, 0.15) !important;
-    opacity: 0.9;
-    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(64, 128, 255, 0.2) !important;
+    transform: translateY(2px);
+  }
+
+  &:hover {
+    box-shadow: 0 8px 25px rgba(64, 128, 255, 0.3) !important;
+    transform: translateY(-1px);
   }
 }
 
-.gender-popup {
-  overflow: hidden;
-  background-color: #fff;
-  border-radius: 16px 16px 0 0;
-}
-
-.picker-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 48px;
-  background-color: #fff;
-  border-bottom: 1px solid rgba(60, 60, 67, 0.1);
-}
-
-.picker-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1a1a1a;
-}
-
-.gender-picker {
-  padding: 16px 0;
-}
-
-// 适配暗黑模式
 @media (prefers-color-scheme: dark) {
   .personal-page {
-    color: #fff;
     background-color: #000;
   }
 
-  .navbar {
-    background-color: rgba(0, 0, 0, 0.8);
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+  .avatar-section {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
   }
 
-  .profile-title {
+  .avatar {
+    border-color: #2c2c2e;
+  }
+
+  .avatar-username {
     color: #fff;
   }
 
-  .profile-subtitle {
+  .avatar-tip {
     color: rgba(255, 255, 255, 0.6);
   }
 
   .up-form {
-    background-color: #1c1c1e;
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: none;
+    background: #1c1c1e;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 
     &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
   }
 
-  .u-form-item {
-    &:not(:last-child) {
-      border-bottom-color: rgba(255, 255, 255, 0.1);
-    }
+  .form-item {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
   }
 
   .item-hover {
     background-color: rgba(255, 255, 255, 0.05);
   }
 
-  .avatar-tip {
-    color: #fff;
-  }
-
-  .avatar-desc,
-  .input-desc {
-    color: rgba(255, 255, 255, 0.45);
-  }
-
-  .username-text {
-    color: rgba(255, 255, 255, 0.6);
-  }
-
   .form-input {
     :deep(input) {
       color: #fff;
-
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.3);
-      }
     }
   }
 
@@ -553,21 +467,6 @@ onMounted(async () => {
 
   .save-button {
     background: linear-gradient(135deg, #1a90ff 0%, #0c53b7 100%) !important;
-    box-shadow: 0 4px 12px rgba(25, 144, 255, 0.2) !important;
-
-    &:active {
-      box-shadow: 0 2px 8px rgba(25, 144, 255, 0.15) !important;
-    }
-  }
-
-  .gender-popup,
-  .picker-header {
-    background-color: #1c1c1e;
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .picker-title {
-    color: #fff;
   }
 }
 </style>

@@ -25,16 +25,6 @@
 <script lang="ts" setup>
 const toolList = [
   {
-    title: '我的评价',
-    icon: '/static/mine/feedback.png',
-    url: '/pages/order/evaluate/myEvaluate',
-  },
-  {
-    title: '我的关注',
-    icon: '/static/mine/myfavorite.png',
-    url: '/pages/mine/myCollect',
-  },
-  {
     title: '我的积分',
     icon: '/static/mine/mypoint.png',
     url: '/pages/user/tool/point',
@@ -43,11 +33,6 @@ const toolList = [
     title: '我的分销',
     icon: '/static/mine/distribution.png',
     url: '',
-  },
-  {
-    title: '我的投诉',
-    icon: '/static/mine/shensu.png',
-    url: '/pages/order/complain/complainList',
   },
   {
     title: '优惠券',
