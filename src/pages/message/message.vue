@@ -5,6 +5,7 @@
   },
 }
 </route>
+
 <template>
   <view class="message-page" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
     <UNavbar class="navbar" :is-back="false" :is-fixed="true" :title="t('message')">
@@ -23,15 +24,23 @@
           :options="options"
           :key="index"
           class="message-item-wrapper"
+          @click="handleSwipeClick($event, item)"
         >
           <view
             class="message-item"
-            :class="{ 'message-item--unread': item.unread }"
+            :class="{
+              'message-item--unread': item.unread,
+              'message-item--selected': isEdit && selectedMessages.includes(item.id),
+            }"
             @click="handleMessageClick(item)"
           >
             <!-- 选择框 -->
             <view v-if="isEdit" class="checkbox-wrapper" @click.stop="toggleSelect(item.id)">
-              <u-checkbox :checked="selectedMessages.includes(item.id)" class="checkbox" />
+              <checkbox
+                :checked="selectedMessages.includes(item.id)"
+                class="checkbox"
+                :disabled="!item.unread && isReadOnlySelect"
+              />
             </view>
 
             <!-- 消息内容区 -->
@@ -39,7 +48,7 @@
               <!-- 消息头部 -->
               <view class="message-header">
                 <text class="message-title">{{ item.title }}</text>
-                <text class="message-time">{{ item.time }}</text>
+                <text class="message-time">{{ formatTime(item.time) }}</text>
               </view>
 
               <!-- 消息内容 -->
@@ -53,6 +62,7 @@
                 :absolute="true"
                 :offset="['-16rpx', '16rpx']"
                 type="error"
+                :show="!isEdit"
               />
             </view>
           </view>
@@ -74,16 +84,30 @@
         paddingBottom: `calc(${safeAreaInsets?.bottom}px + 24rpx)`,
       }"
     >
-      <view class="select-all" @click="toggleSelectAll">
-        <u-checkbox
+      <view class="select-all">
+        <checkbox
           :checked="isAllSelected"
           class="checkbox"
-          icon-size="36rpx"
-          active-color="#ff6b6b"
+          :disabled="!messageList.length"
+          @click="toggleSelectAll"
         />
-        <text class="select-text">全选</text>
+        <text class="select-text" @click="messageList.length && toggleSelectAll">
+          全选 {{ isAllSelected ? `(${selectedMessages.length})` : '' }}
+        </text>
       </view>
       <view class="action-buttons">
+        <up-button
+          class="action-btn mark-btn"
+          type="primary"
+          size="small"
+          :disabled="!hasSelectedUnread"
+          @click="markSelectedAsRead"
+        >
+          <template #icon>
+            <up-icon name="checkmark-circle-fill" size="32rpx" color="#fff"></up-icon>
+          </template>
+          标为已读 {{ selectedUnreadCount ? `(${selectedUnreadCount})` : '' }}
+        </up-button>
         <up-button
           class="action-btn delete-btn"
           type="error"
@@ -96,13 +120,7 @@
           </template>
           删除 {{ selectedMessages.length ? `(${selectedMessages.length})` : '' }}
         </up-button>
-        <up-button
-          class="action-btn cancel-btn"
-          type="info"
-          size="small"
-          plain
-          @click="isEdit = false"
-        >
+        <up-button class="action-btn cancel-btn" type="info" size="small" plain @click="cancelEdit">
           取消
         </up-button>
       </view>
@@ -136,6 +154,7 @@
             () => {
               showOper = false
               isEdit = true
+              isReadOnlySelect = false
             }
           "
         >
@@ -144,16 +163,39 @@
           </template>
         </up-cell>
         <up-cell
+          title="批量标记已读"
+          :title-style="{ fontSize: '32rpx', fontWeight: 500 }"
+          hover-class="cell-hover"
+          :disabled="!hasUnread"
+          @click="
+            () => {
+              showOper = false
+              isEdit = true
+              isReadOnlySelect = true
+            }
+          "
+        >
+          <template #icon>
+            <up-icon
+              name="checkmark-circle-fill"
+              size="40rpx"
+              :color="hasUnread ? '#19be6b' : '#ccc'"
+              class="cell-icon"
+            ></up-icon>
+          </template>
+        </up-cell>
+        <up-cell
           title="全部标记已读"
           :title-style="{ fontSize: '32rpx', fontWeight: 500 }"
           hover-class="cell-hover"
+          :disabled="!hasUnread"
           @click="markAllAsRead"
         >
           <template #icon>
             <up-icon
               name="checkmark-circle-fill"
               size="40rpx"
-              color="#19be6b"
+              :color="hasUnread ? '#19be6b' : '#ccc'"
               class="cell-icon"
             ></up-icon>
           </template>
@@ -167,6 +209,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UNavbar from '@/components/navbar/u-navbar.vue'
+import dayjs from 'dayjs'
 
 const { t } = useI18n()
 
@@ -195,12 +238,21 @@ const messageList = ref([
 const isEdit = ref(false)
 const showOper = ref(false)
 const selectedMessages = ref<number[]>([])
+const isReadOnlySelect = ref(false)
 
 // 计算属性
 const isAllSelected = computed(
   () => messageList.value.length > 0 && messageList.value.length === selectedMessages.value.length,
 )
 const hasUnread = computed(() => messageList.value.some((msg) => msg.unread))
+const hasSelectedUnread = computed(() =>
+  selectedMessages.value.some((id) => messageList.value.find((msg) => msg.id === id)?.unread),
+)
+const selectedUnreadCount = computed(
+  () =>
+    selectedMessages.value.filter((id) => messageList.value.find((msg) => msg.id === id)?.unread)
+      .length,
+)
 
 // 滑动操作配置
 const options = [
@@ -214,8 +266,28 @@ const options = [
   },
 ]
 
+// 格式化时间
+const formatTime = (time: string) => {
+  const messageTime = dayjs(time)
+  const now = dayjs()
+
+  if (messageTime.isSame(now, 'day')) {
+    return messageTime.format('HH:mm')
+  } else if (messageTime.isSame(now.subtract(1, 'day'), 'day')) {
+    return '昨天'
+  } else if (messageTime.isSame(now, 'year')) {
+    return messageTime.format('MM-DD')
+  }
+  return messageTime.format('YYYY-MM-DD')
+}
+
 // 选择消息
 const toggleSelect = (id: number) => {
+  if (isReadOnlySelect.value) {
+    const message = messageList.value.find((msg) => msg.id === id)
+    if (!message?.unread) return
+  }
+
   const index = selectedMessages.value.indexOf(id)
   if (index === -1) {
     selectedMessages.value.push(id)
@@ -229,18 +301,35 @@ const toggleSelectAll = () => {
   if (isAllSelected.value) {
     selectedMessages.value = []
   } else {
-    selectedMessages.value = messageList.value.map((item) => item.id)
+    if (isReadOnlySelect.value) {
+      selectedMessages.value = messageList.value.filter((msg) => msg.unread).map((msg) => msg.id)
+    } else {
+      selectedMessages.value = messageList.value.map((msg) => msg.id)
+    }
   }
 }
 
 // 标记消息已读
 const markAsRead = (ids: number[]) => {
   messageList.value = messageList.value.map((msg) => {
-    if (ids.includes(msg.id)) {
+    if (ids.includes(msg.id) && msg.unread) {
       return { ...msg, unread: false }
     }
     return msg
   })
+}
+
+// 标记选中消息已读
+const markSelectedAsRead = async () => {
+  if (!hasSelectedUnread.value) return
+
+  const unreadIds = selectedMessages.value.filter(
+    (id) => messageList.value.find((msg) => msg.id === id)?.unread,
+  )
+
+  markAsRead(unreadIds)
+  uni.showToast({ title: '已标记为已读', icon: 'success' })
+  isEdit.value = false
 }
 
 // 标记全部已读
@@ -267,7 +356,7 @@ const deleteMessages = (ids: number[]) => {
 const deleteSelected = async () => {
   if (!selectedMessages.value.length) return
 
-  const result = await new Promise((resolve) => {
+  const result: any = await new Promise((resolve) => {
     uni.showModal({
       title: '确认删除',
       content: '是否删除选中的消息？',
@@ -285,6 +374,13 @@ const deleteSelected = async () => {
   }
 }
 
+// 取消编辑
+const cancelEdit = () => {
+  isEdit.value = false
+  isReadOnlySelect.value = false
+  selectedMessages.value = []
+}
+
 // 处理滑动操作点击
 const handleSwipeClick = async (event: any, message: any) => {
   const { index } = event
@@ -298,7 +394,7 @@ const handleSwipeClick = async (event: any, message: any) => {
     uni.showToast({ title: '已标记为已读', icon: 'success' })
   } else if (index === 1) {
     // 删除
-    const result = await new Promise((resolve) => {
+    const result: any = await new Promise((resolve) => {
       uni.showModal({
         title: '确认删除',
         content: '是否删除此消息？',
@@ -333,7 +429,7 @@ const handleMessageClick = (message: any) => {
 // 通用按钮样式
 .action-btn {
   &:active {
-    background-color: #f5f5f5;
+    opacity: 0.8;
   }
 }
 
@@ -344,20 +440,19 @@ const handleMessageClick = (message: any) => {
   .action-btn {
     padding: 20rpx;
     border-radius: 50%;
-    transition: background-color 0.2s;
+    transition: opacity 0.2s;
   }
 }
 
 .message-list {
   padding: 24rpx;
-  padding-bottom: v-bind('isEdit ? "180rpx" : "24rpx"');
 }
 
 .message-item-wrapper {
   margin-bottom: 24rpx;
   overflow: hidden;
   border-radius: 16rpx;
-  transition: transform 0.2s;
+  transition: all 0.2s;
 
   &:active {
     transform: scale(0.98);
@@ -372,10 +467,16 @@ const handleMessageClick = (message: any) => {
   background: #fff;
   border-radius: 16rpx;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  transition: all 0.2s;
 
   &--unread {
     background: #fff9f9;
     border-left: 6rpx solid #ff6b6b;
+  }
+
+  &--selected {
+    background: #f0f7ff;
+    border-left: 6rpx solid #2979ff;
   }
 }
 
@@ -464,6 +565,11 @@ const handleMessageClick = (message: any) => {
   .select-text {
     font-size: 28rpx;
     color: #666;
+    cursor: pointer;
+
+    &:active {
+      opacity: 0.8;
+    }
   }
 }
 
@@ -477,6 +583,20 @@ const handleMessageClick = (message: any) => {
     font-size: 28rpx;
     font-weight: 500;
     border-radius: 36rpx;
+
+    &.mark-btn {
+      background: linear-gradient(135deg, #19be6b, #23d688);
+      border: none;
+
+      :deep(.u-icon) {
+        margin-right: 8rpx;
+      }
+
+      &:disabled {
+        background: #ccc;
+        opacity: 0.6;
+      }
+    }
 
     &.delete-btn {
       background: linear-gradient(135deg, #ff6b6b, #ff8585);
@@ -520,20 +640,24 @@ const handleMessageClick = (message: any) => {
     .close-icon {
       padding: 12rpx;
       border-radius: 50%;
-      transition: background-color 0.2s;
+      transition: opacity 0.2s;
 
       &:active {
-        background-color: #f5f5f5;
+        opacity: 0.8;
       }
     }
   }
-
   :deep(.up-cell) {
     padding: 32rpx !important;
 
     .cell-icon {
       margin-right: 24rpx;
     }
+  }
+
+  :deep(.up-cell--disabled) {
+    pointer-events: none;
+    opacity: 0.5;
   }
 
   .cell-hover {
