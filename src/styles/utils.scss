@@ -4,127 +4,131 @@
 // 生成主题色类
 @each $name, $color in $theme-colors {
   .text-#{$name} {
-    color: $color !important;
+    color: var(--up-#{$name}-color) !important;
   }
   .bg-#{$name} {
-    background-color: $color !important;
+    background-color: var(--up-#{$name}-color) !important;
   }
   .border-#{$name} {
-    border-color: $color !important;
+    border-color: var(--up-#{$name}-color) !important;
   }
 }
 
 // 生成文字颜色类
 @each $name, $color in $text-colors {
   .text-#{$name} {
-    color: $color !important;
+    color: var(--up-text-color-#{$name}) !important;
   }
 }
 
 // 生成背景颜色类
 @each $name, $color in $bg-colors {
   .bg-#{$name} {
-    background-color: $color !important;
+    background-color: var(--up-bg-color-#{$name}) !important;
   }
 }
 
 // 生成边框颜色类
 @each $name, $color in $border-colors {
   .border-#{$name} {
-    border-color: $color !important;
+    border-color: var(--up-border-color-#{$name}) !important;
   }
 }
 
 // 生成字体大小类
 @each $name, $size in $font-sizes {
   .text-#{$name} {
-    font-size: $size !important;
+    font-size: var(--up-font-size-#{$name}) !important;
   }
 }
 
-// 生成行高类
-@each $name, $height in $line-heights {
-  .leading-#{$name} {
-    line-height: $height !important;
+// 生成间距类
+@each $name, $space in $spacing-sizes {
+  // Margin
+  .m-#{$name} {
+    margin: var(--up-spacing-#{$name}) !important;
+  }
+  .mx-#{$name} {
+    margin-right: var(--up-spacing-#{$name}) !important;
+    margin-left: var(--up-spacing-#{$name}) !important;
+  }
+  .my-#{$name} {
+    margin-top: var(--up-spacing-#{$name}) !important;
+    margin-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .mt-#{$name} {
+    margin-top: var(--up-spacing-#{$name}) !important;
+  }
+  .mr-#{$name} {
+    margin-right: var(--up-spacing-#{$name}) !important;
+  }
+  .mb-#{$name} {
+    margin-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .ml-#{$name} {
+    margin-left: var(--up-spacing-#{$name}) !important;
+  }
+
+  // Padding
+  .p-#{$name} {
+    padding: var(--up-spacing-#{$name}) !important;
+  }
+  .px-#{$name} {
+    padding-right: var(--up-spacing-#{$name}) !important;
+    padding-left: var(--up-spacing-#{$name}) !important;
+  }
+  .py-#{$name} {
+    padding-top: var(--up-spacing-#{$name}) !important;
+    padding-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .pt-#{$name} {
+    padding-top: var(--up-spacing-#{$name}) !important;
+  }
+  .pr-#{$name} {
+    padding-right: var(--up-spacing-#{$name}) !important;
+  }
+  .pb-#{$name} {
+    padding-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .pl-#{$name} {
+    padding-left: var(--up-spacing-#{$name}) !important;
   }
 }
 
 // 生成圆角类
 @each $name, $radius in $border-radius {
   .rounded-#{$name} {
-    border-radius: $radius !important;
+    border-radius: var(--up-border-radius-#{$name}) !important;
   }
-}
-
-// 生成间距类
-@each $name, $space in $spacings {
-  .m-#{$name} {
-    margin: $space !important;
+  .rounded-t-#{$name} {
+    border-top-left-radius: var(--up-border-radius-#{$name}) !important;
+    border-top-right-radius: var(--up-border-radius-#{$name}) !important;
   }
-  .mx-#{$name} {
-    margin-right: $space !important;
-    margin-left: $space !important;
+  .rounded-r-#{$name} {
+    border-top-right-radius: var(--up-border-radius-#{$name}) !important;
+    border-bottom-right-radius: var(--up-border-radius-#{$name}) !important;
   }
-  .my-#{$name} {
-    margin-top: $space !important;
-    margin-bottom: $space !important;
+  .rounded-b-#{$name} {
+    border-bottom-right-radius: var(--up-border-radius-#{$name}) !important;
+    border-bottom-left-radius: var(--up-border-radius-#{$name}) !important;
   }
-  .mt-#{$name} {
-    margin-top: $space !important;
-  }
-  .mr-#{$name} {
-    margin-right: $space !important;
-  }
-  .mb-#{$name} {
-    margin-bottom: $space !important;
-  }
-  .ml-#{$name} {
-    margin-left: $space !important;
-  }
-
-  .p-#{$name} {
-    padding: $space !important;
-  }
-  .px-#{$name} {
-    padding-right: $space !important;
-    padding-left: $space !important;
-  }
-  .py-#{$name} {
-    padding-top: $space !important;
-    padding-bottom: $space !important;
-  }
-  .pt-#{$name} {
-    padding-top: $space !important;
-  }
-  .pr-#{$name} {
-    padding-right: $space !important;
-  }
-  .pb-#{$name} {
-    padding-bottom: $space !important;
-  }
-  .pl-#{$name} {
-    padding-left: $space !important;
+  .rounded-l-#{$name} {
+    border-top-left-radius: var(--up-border-radius-#{$name}) !important;
+    border-bottom-left-radius: var(--up-border-radius-#{$name}) !important;
   }
 }
 
 // 生成阴影类
 @each $name, $shadow in $shadows {
   .shadow-#{$name} {
-    box-shadow: $shadow !important;
+    box-shadow: var(--up-shadow-#{$name}) !important;
   }
 }
 
 // 生成过渡类
 @each $name, $transition in $transitions {
   .transition-#{$name} {
-    transition: $transition !important;
-  }
-}
-
-// 生成z-index类
-@each $name, $index in $z-indexes {
-  .z-#{$name} {
-    z-index: $index !important;
+    transition: var(--up-transition-#{$name}) !important;
   }
 }
 
@@ -135,32 +139,14 @@
 .flex-col {
   flex-direction: column !important;
 }
-.flex-row {
-  flex-direction: row !important;
+.flex-1 {
+  flex: 1 !important;
 }
 .flex-wrap {
   flex-wrap: wrap !important;
 }
-.flex-nowrap {
-  flex-wrap: nowrap !important;
-}
-.flex-1 {
-  flex: 1 !important;
-}
-.justify-start {
-  justify-content: flex-start !important;
-}
-.justify-end {
-  justify-content: flex-end !important;
-}
-.justify-center {
-  justify-content: center !important;
-}
-.justify-between {
-  justify-content: space-between !important;
-}
-.justify-around {
-  justify-content: space-around !important;
+.items-center {
+  align-items: center !important;
 }
 .items-start {
   align-items: flex-start !important;
@@ -168,43 +154,45 @@
 .items-end {
   align-items: flex-end !important;
 }
-.items-center {
-  align-items: center !important;
+.justify-center {
+  justify-content: center !important;
 }
-.items-baseline {
-  align-items: baseline !important;
+.justify-between {
+  justify-content: space-between !important;
 }
-.items-stretch {
-  align-items: stretch !important;
+.justify-start {
+  justify-content: flex-start !important;
+}
+.justify-end {
+  justify-content: flex-end !important;
 }
 
 // 文本工具类
-.text-left {
-  text-align: left !important;
-}
 .text-center {
   text-align: center !important;
+}
+.text-left {
+  text-align: left !important;
 }
 .text-right {
   text-align: right !important;
 }
-.text-justify {
-  text-align: justify !important;
-}
-.text-nowrap {
-  white-space: nowrap !important;
+.font-bold {
+  font-weight: bold !important;
 }
 .text-truncate {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
-.text-break {
-  word-break: break-word !important;
-  word-wrap: break-word !important;
+.line-through {
+  text-decoration: line-through !important;
 }
 
-// 定位工具类
+// 其他工具类
+.overflow-hidden {
+  overflow: hidden !important;
+}
 .relative {
   position: relative !important;
 }
@@ -214,53 +202,9 @@
 .fixed {
   position: fixed !important;
 }
-.sticky {
-  position: sticky !important;
+.w-full {
+  width: 100% !important;
 }
-
-// 显示工具类
-.block {
-  display: block !important;
-}
-.inline {
-  display: inline !important;
-}
-.inline-block {
-  display: inline-block !important;
-}
-.hidden {
-  display: none !important;
-}
-
-// 暗黑模式适配
-@media (prefers-color-scheme: dark) {
-  @each $name, $color in $dark-theme-colors {
-    .text-#{$name} {
-      color: $color !important;
-    }
-    .bg-#{$name} {
-      background-color: $color !important;
-    }
-    .border-#{$name} {
-      border-color: $color !important;
-    }
-  }
-
-  @each $name, $color in $dark-text-colors {
-    .text-#{$name} {
-      color: $color !important;
-    }
-  }
-
-  @each $name, $color in $dark-bg-colors {
-    .bg-#{$name} {
-      background-color: $color !important;
-    }
-  }
-
-  @each $name, $color in $dark-border-colors {
-    .border-#{$name} {
-      border-color: $color !important;
-    }
-  }
+.h-full {
+  height: 100% !important;
 }
