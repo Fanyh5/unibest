@@ -1,0 +1,149 @@
+// 主题色配置
+$theme-colors: (
+  primary: #4080ff,
+  success: #00b42a,
+  warning: #ff7d00,
+  danger: #f53f3f,
+  info: #86909c,
+  dark: #1d2129,
+  light: #f2f3f5,
+  white: #ffffff,
+  black: #000000,
+);
+
+// 文字颜色
+$text-colors: (
+  primary: #1d2129,
+  regular: #4e5969,
+  secondary: #86909c,
+  disabled: #c9cdd4,
+  placeholder: #c9cdd4,
+  inverse: #ffffff,
+);
+
+// 背景颜色
+$bg-colors: (
+  page: #f7f8fa,
+  card: #ffffff,
+  mask: rgba(0, 0, 0, 0.45),
+  loading: rgba(255, 255, 255, 0.9),
+  hover: rgba(0, 0, 0, 0.04),
+  active: rgba(0, 0, 0, 0.08),
+);
+
+// 边框颜色
+$border-colors: (
+  default: #e5e6eb,
+  dark: #c9cdd4,
+  light: #f2f3f5,
+);
+
+// 字体大小
+$font-sizes: (
+  xs: 10px,
+  sm: 12px,
+  base: 14px,
+  lg: 16px,
+  xl: 18px,
+  xxl: 20px,
+  xxxl: 24px,
+  title: 32px,
+);
+
+// 行高
+$line-heights: (
+  none: 1,
+  tight: 1.25,
+  normal: 1.5,
+  loose: 2,
+);
+
+// 圆角
+$border-radius: (
+  none: 0,
+  sm: 2px,
+  base: 4px,
+  lg: 8px,
+  xl: 12px,
+  xxl: 16px,
+  full: 9999px,
+);
+
+// 间距
+$spacings: (
+  none: 0,
+  xs: 4px,
+  sm: 8px,
+  base: 12px,
+  lg: 16px,
+  xl: 24px,
+  xxl: 32px,
+  xxxl: 48px,
+);
+
+// 阴影
+$shadows: (
+  none: none,
+  sm: 0 1px 2px rgba(0, 0, 0, 0.05),
+  base: 0 2px 4px rgba(0, 0, 0, 0.05),
+  lg: 0 4px 8px rgba(0, 0, 0, 0.1),
+  xl: 0 8px 16px rgba(0, 0, 0, 0.1),
+  xxl: 0 12px 24px rgba(0, 0, 0, 0.15),
+);
+
+// 过渡动画
+$transitions: (
+  base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+  fast: all 0.1s cubic-bezier(0.4, 0, 0.2, 1),
+  slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+);
+
+// z-index层级
+$z-indexes: (
+  negative: -1,
+  base: 1,
+  dropdown: 1000,
+  sticky: 1020,
+  fixed: 1030,
+  modal: 1040,
+  popover: 1050,
+  tooltip: 1060,
+  toast: 1070,
+);
+
+// 暗黑模式颜色
+$dark-theme-colors: (
+  primary: #4080ff,
+  success: #00b42a,
+  warning: #ff7d00,
+  danger: #f53f3f,
+  info: #86909c,
+  dark: #f2f3f5,
+  light: #1d2129,
+  white: #1d2129,
+  black: #ffffff,
+);
+
+$dark-text-colors: (
+  primary: #f2f3f5,
+  regular: #c9cdd4,
+  secondary: #86909c,
+  disabled: #4e5969,
+  placeholder: #4e5969,
+  inverse: #1d2129,
+);
+
+$dark-bg-colors: (
+  page: #17171a,
+  card: #232324,
+  mask: rgba(0, 0, 0, 0.65),
+  loading: rgba(0, 0, 0, 0.9),
+  hover: rgba(255, 255, 255, 0.08),
+  active: rgba(255, 255, 255, 0.12),
+);
+
+$dark-border-colors: (
+  default: #333335,
+  dark: #4e5969,
+  light: #232324,
+);

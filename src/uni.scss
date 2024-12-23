@@ -12,8 +12,9 @@
  *
  * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
  */
-/* stylelint-disable-next-line scss/at-import-partial-extension */
-@import 'uview-plus/theme.scss';
+@import '@/styles/theme';
+@import '@/styles/utils';
+
 /* 颜色变量 */
 
 /* 行为相关颜色 */
@@ -76,3 +77,196 @@ $uni-color-subtitle: #555; // 二级标题颜色
 $uni-font-size-subtitle: 18px;
 $uni-color-paragraph: #3f536e; // 文章段落颜色
 $uni-font-size-paragraph: 15px;
+
+// 全局样式变量
+:root {
+  // 主题色
+  --up-primary-color: #{map.get($theme-colors, 'primary')};
+  --up-success-color: #{map.get($theme-colors, 'success')};
+  --up-warning-color: #{map.get($theme-colors, 'warning')};
+  --up-danger-color: #{map.get($theme-colors, 'danger')};
+  --up-info-color: #{map.get($theme-colors, 'info')};
+
+  // 文字颜色
+  --up-text-color-primary: #{map.get($text-colors, 'primary')};
+  --up-text-color-regular: #{map.get($text-colors, 'regular')};
+  --up-text-color-secondary: #{map.get($text-colors, 'secondary')};
+  --up-text-color-disabled: #{map.get($text-colors, 'disabled')};
+  --up-text-color-placeholder: #{map.get($text-colors, 'placeholder')};
+
+  // 背景颜色
+  --up-bg-color-page: #{map.get($bg-colors, 'page')};
+  --up-bg-color-card: #{map.get($bg-colors, 'card')};
+  --up-bg-color-mask: #{map.get($bg-colors, 'mask')};
+  --up-bg-color-loading: #{map.get($bg-colors, 'loading')};
+  --up-bg-color-hover: #{map.get($bg-colors, 'hover')};
+  --up-bg-color-active: #{map.get($bg-colors, 'active')};
+
+  // 边框颜色
+  --up-border-color: #{map.get($border-colors, 'default')};
+  --up-border-color-dark: #{map.get($border-colors, 'dark')};
+  --up-border-color-light: #{map.get($border-colors, 'light')};
+
+  // 字体大小
+  --up-font-size-xs: #{map.get($font-sizes, 'xs')};
+  --up-font-size-sm: #{map.get($font-sizes, 'sm')};
+  --up-font-size-base: #{map.get($font-sizes, 'base')};
+  --up-font-size-lg: #{map.get($font-sizes, 'lg')};
+  --up-font-size-xl: #{map.get($font-sizes, 'xl')};
+
+  // 圆角
+  --up-border-radius-base: #{map.get($border-radius, 'base')};
+  --up-border-radius-lg: #{map.get($border-radius, 'lg')};
+  --up-border-radius-xl: #{map.get($border-radius, 'xl')};
+
+  // 间距
+  --up-spacing-base: #{map.get($spacings, 'base')};
+  --up-spacing-lg: #{map.get($spacings, 'lg')};
+  --up-spacing-xl: #{map.get($spacings, 'xl')};
+
+  // 阴影
+  --up-shadow-base: #{map.get($shadows, 'base')};
+  --up-shadow-lg: #{map.get($shadows, 'lg')};
+  --up-shadow-xl: #{map.get($shadows, 'xl')};
+
+  // 过渡
+  --up-transition-base: #{map.get($transitions, 'base')};
+}
+
+// 暗黑模式
+@media (prefers-color-scheme: dark) {
+  :root {
+    // 主题色
+    --up-primary-color: #{map.get($dark-theme-colors, 'primary')};
+    --up-success-color: #{map.get($dark-theme-colors, 'success')};
+    --up-warning-color: #{map.get($dark-theme-colors, 'warning')};
+    --up-danger-color: #{map.get($dark-theme-colors, 'danger')};
+    --up-info-color: #{map.get($dark-theme-colors, 'info')};
+
+    // 文字颜色
+    --up-text-color-primary: #{map.get($dark-text-colors, 'primary')};
+    --up-text-color-regular: #{map.get($dark-text-colors, 'regular')};
+    --up-text-color-secondary: #{map.get($dark-text-colors, 'secondary')};
+    --up-text-color-disabled: #{map.get($dark-text-colors, 'disabled')};
+    --up-text-color-placeholder: #{map.get($dark-text-colors, 'placeholder')};
+
+    // 背景颜色
+    --up-bg-color-page: #{map.get($dark-bg-colors, 'page')};
+    --up-bg-color-card: #{map.get($dark-bg-colors, 'card')};
+    --up-bg-color-mask: #{map.get($dark-bg-colors, 'mask')};
+    --up-bg-color-loading: #{map.get($dark-bg-colors, 'loading')};
+    --up-bg-color-hover: #{map.get($dark-bg-colors, 'hover')};
+    --up-bg-color-active: #{map.get($dark-bg-colors, 'active')};
+
+    // 边框颜色
+    --up-border-color: #{map.get($dark-border-colors, 'default')};
+    --up-border-color-dark: #{map.get($dark-border-colors, 'dark')};
+    --up-border-color-light: #{map.get($dark-border-colors, 'light')};
+  }
+}
+
+// 全局基础样式
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: var(--up-font-size-base);
+  line-height: 1.5;
+  color: var(--up-text-color-primary);
+  background-color: var(--up-bg-color-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 通用卡片样式
+.card {
+  padding: var(--up-spacing-base);
+  margin-bottom: var(--up-spacing-base);
+  background-color: var(--up-bg-color-card);
+  border-radius: var(--up-border-radius-lg);
+  box-shadow: var(--up-shadow-base);
+}
+
+// 通用按钮样式
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 var(--up-spacing-xl);
+  font-size: var(--up-font-size-base);
+  line-height: 1;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--up-border-radius-base);
+  outline: none;
+  transition: var(--up-transition-base);
+
+  &.btn-primary {
+    color: #fff;
+    background: var(--up-primary-color);
+    &:active {
+      opacity: 0.9;
+    }
+  }
+
+  &.btn-default {
+    color: var(--up-text-color-regular);
+    background: var(--up-bg-color-card);
+    border: 1px solid var(--up-border-color);
+    &:active {
+      background: var(--up-bg-color-hover);
+    }
+  }
+}
+
+// 通用输入框样式
+.input {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--up-spacing-base);
+  font-size: var(--up-font-size-base);
+  color: var(--up-text-color-primary);
+  background-color: var(--up-bg-color-card);
+  border: 1px solid var(--up-border-color);
+  border-radius: var(--up-border-radius-base);
+  transition: var(--up-transition-base);
+
+  &:focus {
+    border-color: var(--up-primary-color);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var(--up-text-color-placeholder);
+  }
+}
+
+// 1px 边框
+.border-bottom {
+  position: relative;
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    content: '';
+    background-color: var(--up-border-color);
+    transform: scaleY(0.5);
+  }
+}
+
+.border-top {
+  position: relative;
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    content: '';
+    background-color: var(--up-border-color);
+    transform: scaleY(0.5);
+  }
+}
