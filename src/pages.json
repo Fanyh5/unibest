@@ -70,6 +70,10 @@
       }
     },
     {
+      "path": "pages/error/500",
+      "type": "page"
+    },
+    {
       "path": "pages/message/message",
       "type": "page",
       "style": {

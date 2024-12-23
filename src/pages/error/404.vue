@@ -16,9 +16,17 @@
       <text class="info">2. 请检查网络环境是否通畅</text>
       <text class="info">3. 关闭广告屏蔽插件后重试</text>
     </view>
-    <button class="back-btn" @click="uni.switchTab({ url: '/' })">返回首页</button>
+    <button class="back-btn" @click="goHome">返回首页</button>
   </view>
 </template>
+
+<script setup lang="ts">
+const goHome = () => {
+  uni.switchTab({
+    url: '/',
+  })
+}
+</script>
 
 <style lang="scss" scoped>
 .error {

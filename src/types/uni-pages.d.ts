@@ -8,6 +8,7 @@ interface NavigateToOptions {
        "/pages/auth/login" |
        "/pages/category/category" |
        "/pages/error/404" |
+       "/pages/error/500" |
        "/pages/message/message" |
        "/pages/public/search" |
        "/pages/user/user" |
