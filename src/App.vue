@@ -2,11 +2,11 @@
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 
 onLaunch(() => {
-  uni.hideTabBar()
+  uni.hideTabBar({
+    fail: () => {},
+  })
 })
-onShow(() => {
-  uni.hideTabBar()
-})
+onShow(() => {})
 onHide(() => {})
 
 onPageNotFound(() => {
