@@ -1,0 +1,210 @@
+@use 'sass:map';
+@import './theme';
+
+// 生成主题色类
+@each $name, $color in $theme-colors {
+  .text-#{$name} {
+    color: var(--up-#{$name}-color) !important;
+  }
+  .bg-#{$name} {
+    background-color: var(--up-#{$name}-color) !important;
+  }
+  .border-#{$name} {
+    border-color: var(--up-#{$name}-color) !important;
+  }
+}
+
+// 生成文字颜色类
+@each $name, $color in $text-colors {
+  .text-#{$name} {
+    color: var(--up-text-color-#{$name}) !important;
+  }
+}
+
+// 生成背景颜色类
+@each $name, $color in $bg-colors {
+  .bg-#{$name} {
+    background-color: var(--up-bg-color-#{$name}) !important;
+  }
+}
+
+// 生成边框颜色类
+@each $name, $color in $border-colors {
+  .border-#{$name} {
+    border-color: var(--up-border-color-#{$name}) !important;
+  }
+}
+
+// 生成字体大小类
+@each $name, $size in $font-sizes {
+  .text-#{$name} {
+    font-size: var(--up-font-size-#{$name}) !important;
+  }
+}
+
+// 生成间距类
+@each $name, $space in $spacing-sizes {
+  // Margin
+  .m-#{$name} {
+    margin: var(--up-spacing-#{$name}) !important;
+  }
+  .mx-#{$name} {
+    margin-right: var(--up-spacing-#{$name}) !important;
+    margin-left: var(--up-spacing-#{$name}) !important;
+  }
+  .my-#{$name} {
+    margin-top: var(--up-spacing-#{$name}) !important;
+    margin-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .mt-#{$name} {
+    margin-top: var(--up-spacing-#{$name}) !important;
+  }
+  .mr-#{$name} {
+    margin-right: var(--up-spacing-#{$name}) !important;
+  }
+  .mb-#{$name} {
+    margin-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .ml-#{$name} {
+    margin-left: var(--up-spacing-#{$name}) !important;
+  }
+
+  // Padding
+  .p-#{$name} {
+    padding: var(--up-spacing-#{$name}) !important;
+  }
+  .px-#{$name} {
+    padding-right: var(--up-spacing-#{$name}) !important;
+    padding-left: var(--up-spacing-#{$name}) !important;
+  }
+  .py-#{$name} {
+    padding-top: var(--up-spacing-#{$name}) !important;
+    padding-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .pt-#{$name} {
+    padding-top: var(--up-spacing-#{$name}) !important;
+  }
+  .pr-#{$name} {
+    padding-right: var(--up-spacing-#{$name}) !important;
+  }
+  .pb-#{$name} {
+    padding-bottom: var(--up-spacing-#{$name}) !important;
+  }
+  .pl-#{$name} {
+    padding-left: var(--up-spacing-#{$name}) !important;
+  }
+}
+
+// 生成圆角类
+@each $name, $radius in $border-radius {
+  .rounded-#{$name} {
+    border-radius: var(--up-border-radius-#{$name}) !important;
+  }
+  .rounded-t-#{$name} {
+    border-top-left-radius: var(--up-border-radius-#{$name}) !important;
+    border-top-right-radius: var(--up-border-radius-#{$name}) !important;
+  }
+  .rounded-r-#{$name} {
+    border-top-right-radius: var(--up-border-radius-#{$name}) !important;
+    border-bottom-right-radius: var(--up-border-radius-#{$name}) !important;
+  }
+  .rounded-b-#{$name} {
+    border-bottom-right-radius: var(--up-border-radius-#{$name}) !important;
+    border-bottom-left-radius: var(--up-border-radius-#{$name}) !important;
+  }
+  .rounded-l-#{$name} {
+    border-top-left-radius: var(--up-border-radius-#{$name}) !important;
+    border-bottom-left-radius: var(--up-border-radius-#{$name}) !important;
+  }
+}
+
+// 生成阴影类
+@each $name, $shadow in $shadows {
+  .shadow-#{$name} {
+    box-shadow: var(--up-shadow-#{$name}) !important;
+  }
+}
+
+// 生成过渡类
+@each $name, $transition in $transitions {
+  .transition-#{$name} {
+    transition: var(--up-transition-#{$name}) !important;
+  }
+}
+
+// 布局工具类
+.flex {
+  display: flex !important;
+}
+.flex-col {
+  flex-direction: column !important;
+}
+.flex-1 {
+  flex: 1 !important;
+}
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+.items-center {
+  align-items: center !important;
+}
+.items-start {
+  align-items: flex-start !important;
+}
+.items-end {
+  align-items: flex-end !important;
+}
+.justify-center {
+  justify-content: center !important;
+}
+.justify-between {
+  justify-content: space-between !important;
+}
+.justify-start {
+  justify-content: flex-start !important;
+}
+.justify-end {
+  justify-content: flex-end !important;
+}
+
+// 文本工具类
+.text-center {
+  text-align: center !important;
+}
+.text-left {
+  text-align: left !important;
+}
+.text-right {
+  text-align: right !important;
+}
+.font-bold {
+  font-weight: bold !important;
+}
+.text-truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.line-through {
+  text-decoration: line-through !important;
+}
+
+// 其他工具类
+.overflow-hidden {
+  overflow: hidden !important;
+}
+.relative {
+  position: relative !important;
+}
+.absolute {
+  position: absolute !important;
+}
+.fixed {
+  position: fixed !important;
+}
+.w-full {
+  width: 100% !important;
+}
+.h-full {
+  height: 100% !important;
+}
