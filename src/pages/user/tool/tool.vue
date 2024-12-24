@@ -8,13 +8,13 @@
           style="margin: 0 20rpx; border-radius: 20rpx"
         >
           <view
-            v-for="(item, index) in toolList"
+            v-for="(item, index) in $inits.menus.commonUserMenu"
             :key="index"
             class="interact-item"
-            @click="item.url && navigateTo(item.url)"
+            @click="item.route && navigateTo(item.route)"
           >
-            <image :src="item.icon"></image>
-            <view>{{ item.title }}</view>
+            <image :src="item.data.lightIcon"></image>
+            <view>{{ item.name }}</view>
           </view>
         </view>
       </div>
@@ -23,49 +23,9 @@
 </template>
 
 <script lang="ts" setup>
-const toolList = [
-  {
-    title: '我的积分',
-    icon: '/static/mine/mypoint.png',
-    url: '/pages/user/tool/point',
-  },
-  {
-    title: '我的分销',
-    icon: '/static/mine/distribution.png',
-    url: '',
-  },
-  {
-    title: '优惠券',
-    icon: '/static/mine/mycoupon.png',
-    url: '/pages/user/coupon/coupon',
-  },
-  {
-    title: '每日签到',
-    icon: '/static/mine/sign.png',
-    url: '/pages/user/tool/signIn',
-  },
-  {
-    title: '领券中心',
-    icon: '/static/mine/couponcenter.png',
-    url: '/pages/cart/coupon/couponCenter',
-  },
-  {
-    title: '意见反馈',
-    icon: '/static/mine/feedback.png',
-    url: '/pages/mine/set/feedBack',
-  },
-  {
-    title: '关于',
-    icon: '/static/mine/pointgift.png',
-    url: '/pages/user/setting/about',
-  },
-  {
-    title: '设置',
-    icon: '/static/mine/setting.png',
-    url: '/pages/user/tool/setting',
-  },
-]
+import { useInitsStore } from '@/store'
 
+const $inits = useInitsStore()
 function navigateTo(url: string) {
   uni.navigateTo({
     url,

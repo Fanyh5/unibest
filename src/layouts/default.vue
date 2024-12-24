@@ -11,8 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-
 interface TabItem {
   icon: string
   activeIcon: string
@@ -78,12 +76,16 @@ const getCurrentPath = (): string => {
   } else {
     currentPath = extractPath(window.location.pathname)
   }
-  if (currentPath === '/index') currentPath = '/'
   // #endif
 
   // #ifdef APP-PLUS
   currentPath = uni.getStorageSync('currentPagePath') || '/pages/index/index'
   // #endif
+
+  // 如果是根路径,返回首页路径
+  if (currentPath === '/') {
+    currentPath = '/pages/index/index'
+  }
 
   return currentPath
 }

@@ -26,6 +26,7 @@ export function createApp() {
         $inits.logo = res.data.logo
         $inits.lang = res.data.lang
         $inits.notice = res.data.notice
+        $inits.menus = res.data.menus
       }
     }
   })
